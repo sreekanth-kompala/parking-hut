@@ -295,7 +295,7 @@ const SeekerHome: React.FC = () => {
 
   return (
     <div className="w-full animate-fade-in-up">
-      {/* Expanded Hero Section */}
+      {/* Expanded Hero Section - Container widened to max-w-[1500px] */}
       <section className="relative overflow-hidden min-h-[75vh] flex flex-col justify-center items-center py-24 rounded-[4rem] mt-4 md:mt-8 text-center">
         <div className="absolute inset-0 z-0">
           <img
@@ -306,15 +306,14 @@ const SeekerHome: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/40 to-slate-900/80"></div>
         </div>
 
-        {/* Container widened to max-w-7xl */}
-        <div className="relative z-10 w-full max-w-7xl px-4 md:px-12 lg:px-20 flex flex-col items-center">
+        <div className="relative z-10 w-full max-w-[1500px] px-4 md:px-8 lg:px-12 flex flex-col items-center">
           <div className="animate-fade-in-up flex flex-col items-center">
             <h1 className="text-6xl md:text-9xl lg:text-[11rem] font-extrabold text-white tracking-tighter leading-[0.85] mb-12">
               {user
                 ? `Hello, ${profile?.name?.split(" ")[0] || "Explorer"}! 👋`
                 : "The Smarter Way to Park"}
             </h1>
-            <p className="text-slate-200 font-medium text-2xl md:text-4xl mb-20 opacity-90 leading-relaxed max-w-5xl">
+            <p className="text-slate-200 font-medium text-2xl md:text-4xl mb-20 opacity-90 leading-relaxed max-w-6xl">
               {user
                 ? "Your journey is already mapped out. Where are we heading next?"
                 : "Discover hidden parking gems in your neighborhood. Secure, verified, and affordable slots at your fingertips."}
@@ -324,7 +323,7 @@ const SeekerHome: React.FC = () => {
               {!user && (
                 <button
                   onClick={() => setActiveTab("spaces")}
-                  className="inline-flex items-center gap-6 bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-20 py-10 rounded-[2.5rem] font-black text-xl transition-all group shadow-2xl shadow-yellow-400/40 active:scale-95"
+                  className="inline-flex items-center gap-6 bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-20 py-10 rounded-[2.5rem] font-black text-xl transition-all group shadow-2xl shadow-yellow-400/40 active:scale-[0.98]"
                 >
                   EXPLORE NOW{" "}
                   <ArrowRight
@@ -362,7 +361,7 @@ const SeekerHome: React.FC = () => {
       </section>
 
       <div className="py-24 space-y-40">
-        {/* Featured Spots Section - Widened Cards */}
+        {/* Featured Spots Section */}
         <section>
           <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left mb-20 gap-8">
             <div>
@@ -399,7 +398,6 @@ const SeekerHome: React.FC = () => {
                   key={space.id}
                   className="min-w-[540px] bg-white rounded-[4.5rem] border border-slate-100 shadow-xl overflow-hidden group hover:border-yellow-300 transition-all cursor-pointer flex flex-col"
                 >
-                  {/* Image height increased to h-80 to match wider cards */}
                   <div className="h-80 bg-slate-100 relative overflow-hidden m-6 rounded-[3.5rem]">
                     <img
                       src={
@@ -440,7 +438,7 @@ const SeekerHome: React.FC = () => {
           </div>
         </section>
 
-        {/* Mobile App Section - Widened Text */}
+        {/* Mobile App Section */}
         <section className="bg-slate-900 p-20 md:p-32 lg:p-40 rounded-[6rem] flex flex-col lg:flex-row items-center gap-32 overflow-hidden relative">
           <div className="absolute -top-40 -left-40 w-[800px] h-[800px] bg-yellow-400 rounded-full blur-[250px] opacity-10"></div>
           <div className="flex-1 z-10 space-y-16 text-center lg:text-left flex flex-col items-center lg:items-start">
@@ -450,8 +448,7 @@ const SeekerHome: React.FC = () => {
             <h2 className="text-7xl md:text-9xl font-black text-white leading-[0.85] tracking-tighter">
               Parking Hut in your Pocket
             </h2>
-            {/* Increased max-w for descriptive text */}
-            <p className="text-slate-400 text-2xl md:text-3xl leading-relaxed font-medium max-w-4xl">
+            <p className="text-slate-400 text-2xl md:text-3xl leading-relaxed font-medium max-w-5xl">
               Get real-time directions to your spot, instant push notifications
               for booking updates, and quick one-tap extensions right from our
               mobile app.
@@ -516,9 +513,9 @@ const SeekerHome: React.FC = () => {
         </section>
       </div>
 
-      {/* Footer Container is already max-w-7xl */}
+      {/* Footer - Container widened to max-w-[1500px] */}
       <footer className="pt-40 pb-20 border-t border-slate-100 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-[1500px] mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-24 mb-40 text-center md:text-left">
             <div className="col-span-1 flex flex-col items-center md:items-start">
               <div className="flex items-center gap-5 mb-12">
