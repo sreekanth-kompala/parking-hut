@@ -108,7 +108,7 @@ const AppPreviewMockup = () => (
           Popular Near You
         </h4>
         <span className="text-[8px] font-black text-yellow-600 uppercase tracking-widest">
-          See All &gt;
+          See All &gt
         </span>
       </div>
       <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
@@ -476,8 +476,8 @@ const SeekerHome: React.FC = () => {
 
   return (
     <div className="w-full animate-fade-in-up">
-      {/* Header Hero Section */}
-      <section className="relative overflow-hidden min-h-[70vh] flex flex-col justify-center py-20 rounded-[3rem]">
+      {/* Header Hero Section - Added mt-4 md:mt-8 to separate from static navbar */}
+      <section className="relative overflow-hidden min-h-[70vh] flex flex-col justify-center py-20 rounded-[3rem] mt-4 md:mt-8">
         <div className="absolute inset-0 z-0">
           <img
             src={user ? WELCOME_BG_IMAGE : HERO_IMAGE_URL}
