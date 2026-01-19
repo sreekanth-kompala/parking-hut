@@ -476,19 +476,19 @@ const SeekerHome: React.FC = () => {
 
   return (
     <div className="w-full animate-fade-in-up">
-      {/* Header Hero Section - Added mt-4 md:mt-8 to separate from static navbar */}
-      <section className="relative overflow-hidden min-h-[70vh] flex flex-col justify-center py-20 rounded-[3rem] mt-4 md:mt-8">
+      {/* Header Hero Section - Content aligned to center */}
+      <section className="relative overflow-hidden min-h-[70vh] flex flex-col justify-center items-center py-20 rounded-[3rem] mt-4 md:mt-8 text-center">
         <div className="absolute inset-0 z-0">
           <img
             src={user ? WELCOME_BG_IMAGE : HERO_IMAGE_URL}
             className="w-full h-full object-cover transform scale-105 hover:scale-100 transition-transform duration-1000"
             alt="Hero Background"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/40 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/40 to-slate-900/80"></div>
         </div>
 
-        <div className="relative z-10 w-full max-w-5xl px-4 md:px-10">
-          <div className="animate-fade-in-up">
+        <div className="relative z-10 w-full max-w-5xl px-4 md:px-10 flex flex-col items-center">
+          <div className="animate-fade-in-up flex flex-col items-center">
             <h1 className="text-5xl md:text-8xl lg:text-[10rem] font-extrabold text-white tracking-tighter leading-[0.9] mb-10">
               {user
                 ? `Hello, ${profile?.name?.split(" ")[0] || "Explorer"}! 👋`
@@ -500,7 +500,7 @@ const SeekerHome: React.FC = () => {
                 : "Discover hidden parking gems in your neighborhood. Secure, verified, and affordable slots at your fingertips."}
             </p>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-10">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-10 w-full">
               {!user && (
                 <button
                   onClick={() => setActiveTab("spaces")}
@@ -527,7 +527,7 @@ const SeekerHome: React.FC = () => {
                     className="h-12 w-12 object-contain"
                   />
                 </div>
-                <div>
+                <div className="text-left">
                   <p className="text-sm font-black text-yellow-400 uppercase tracking-[0.2em] leading-none mb-2">
                     Coming Soon
                   </p>
@@ -545,7 +545,7 @@ const SeekerHome: React.FC = () => {
         {/* User Quick Stats (Only if logged in) */}
         {user && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div className="bg-slate-900 p-12 rounded-[3.5rem] text-white shadow-2xl group transition-all hover:scale-[1.01]">
+            <div className="bg-slate-900 p-12 rounded-[3.5rem] text-white shadow-2xl group transition-all hover:scale-[1.01] flex flex-col items-center text-center">
               <Zap
                 className="text-yellow-400 mb-6 group-hover:animate-pulse"
                 size={48}
@@ -558,7 +558,7 @@ const SeekerHome: React.FC = () => {
                 Active Bookings
               </p>
             </div>
-            <div className="bg-white p-12 rounded-[3.5rem] border border-slate-100 shadow-sm group transition-all hover:scale-[1.01]">
+            <div className="bg-white p-12 rounded-[3.5rem] border border-slate-100 shadow-sm group transition-all hover:scale-[1.01] flex flex-col items-center text-center">
               <History className="text-blue-500 mb-6" size={48} />
               <p className="text-8xl font-black text-slate-900 mb-2 leading-none">
                 {totalCount}
@@ -572,7 +572,7 @@ const SeekerHome: React.FC = () => {
 
         {/* Featured Spots Section */}
         <section>
-          <div className="flex justify-between items-end mb-12">
+          <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left mb-12 gap-6">
             <div>
               <h2 className="text-5xl md:text-6xl font-black text-slate-900 uppercase tracking-tighter">
                 Featured Spots
@@ -583,7 +583,7 @@ const SeekerHome: React.FC = () => {
             </div>
             <button
               onClick={() => setActiveTab("spaces")}
-              className="hidden md:flex text-xs font-black text-yellow-600 uppercase tracking-widest items-center gap-3 group bg-yellow-50 px-8 py-5 rounded-2xl hover:bg-yellow-100 transition-colors"
+              className="text-xs font-black text-yellow-600 uppercase tracking-widest items-center gap-3 group bg-yellow-50 px-8 py-5 rounded-2xl hover:bg-yellow-100 transition-colors flex"
             >
               See All{" "}
               <ArrowRight
@@ -621,11 +621,11 @@ const SeekerHome: React.FC = () => {
                       ₹{space.pricing?.car?.hourly || 0}/hr
                     </div>
                   </div>
-                  <div className="p-10">
+                  <div className="p-10 text-center">
                     <h4 className="font-black text-2xl text-slate-900 truncate mb-2">
                       {space.title}
                     </h4>
-                    <div className="flex items-center gap-2 text-slate-400 text-sm font-medium">
+                    <div className="flex items-center justify-center gap-2 text-slate-400 text-sm font-medium">
                       <MapPin size={20} className="text-yellow-500" />
                       <span className="">{space.address}</span>
                     </div>
@@ -645,7 +645,7 @@ const SeekerHome: React.FC = () => {
         {/* Mobile App Section */}
         <section className="bg-slate-900 p-16 md:p-24 lg:p-32 rounded-[5rem] flex flex-col lg:flex-row items-center gap-24 overflow-hidden relative">
           <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-yellow-400 rounded-full blur-[200px] opacity-10"></div>
-          <div className="flex-1 z-10 space-y-12">
+          <div className="flex-1 z-10 space-y-12 text-center lg:text-left flex flex-col items-center lg:items-start">
             <div className="inline-flex items-center gap-4 px-6 py-3 bg-white/10 text-white rounded-full text-xs font-black uppercase tracking-widest border border-white/10">
               <Smartphone size={20} className="text-yellow-400" /> COMING SOON
             </div>
@@ -657,7 +657,7 @@ const SeekerHome: React.FC = () => {
               for booking updates, and quick one-tap extensions right from our
               mobile app.
             </p>
-            <div className="flex flex-wrap gap-8 pt-6">
+            <div className="flex flex-wrap justify-center lg:justify-start gap-8 pt-6">
               <div className="transition-all hover:scale-[1.05] cursor-not-allowed">
                 <img
                   src={APP_STORE_BADGE}
@@ -687,7 +687,7 @@ const SeekerHome: React.FC = () => {
                   Next-Gen Parking
                 </p>
                 <p className="text-slate-400 text-sm font-bold mt-1">
-                  Version 2.4 Coming Soon
+                  Version 2.0 Coming Soon
                 </p>
               </div>
             </div>
@@ -739,14 +739,14 @@ const SeekerHome: React.FC = () => {
 
         {/* Why Choose Us Section */}
         <section className="flex flex-col lg:flex-row items-center gap-24 py-10">
-          <div className="flex-1 space-y-14">
+          <div className="flex-1 space-y-14 text-center lg:text-left flex flex-col items-center lg:items-start">
             <div className="inline-block px-6 py-3 bg-yellow-400/10 text-yellow-600 rounded-full text-xs font-black uppercase tracking-widest">
               Premium Features
             </div>
             <h2 className="text-6xl md:text-8xl font-black text-slate-900 leading-[0.9] tracking-tighter">
               Safety & Convenience is our Priority
             </h2>
-            <div className="grid grid-cols-1 gap-12">
+            <div className="grid grid-cols-1 gap-12 w-full">
               {[
                 {
                   icon: ShieldCheck,
@@ -764,7 +764,10 @@ const SeekerHome: React.FC = () => {
                   desc: "Built for neighbors, by neighbors. Rated 4.9/5 stars by 10k+ users.",
                 },
               ].map((item, i) => (
-                <div key={i} className="flex gap-10 group">
+                <div
+                  key={i}
+                  className="flex flex-col sm:flex-row items-center sm:items-start gap-10 group text-center sm:text-left"
+                >
                   <div className="w-20 h-20 bg-white border border-slate-100 rounded-3xl flex items-center justify-center text-yellow-500 shadow-sm group-hover:shadow-2xl transition-all flex-shrink-0">
                     <item.icon size={36} />
                   </div>
@@ -819,8 +822,8 @@ const SeekerHome: React.FC = () => {
           id="contact"
           className="bg-white p-16 md:p-24 rounded-[5rem] border border-slate-100 shadow-sm"
         >
-          <div className="flex flex-col lg:flex-row gap-24">
-            <div className="flex-1 space-y-12">
+          <div className="flex flex-col lg:flex-row gap-24 items-center">
+            <div className="flex-1 space-y-12 text-center lg:text-left flex flex-col items-center lg:items-start">
               <h2 className="text-5xl font-black text-slate-900 tracking-tighter">
                 Get in Touch
               </h2>
@@ -828,8 +831,8 @@ const SeekerHome: React.FC = () => {
                 Have questions about listing your space or a recent booking? Our
                 support team is here for you 24/7.
               </p>
-              <div className="space-y-10 pt-10">
-                <div className="flex items-center gap-8 text-slate-600 group">
+              <div className="space-y-10 pt-10 w-full flex flex-col items-center lg:items-start">
+                <div className="flex flex-col sm:flex-row items-center gap-8 text-slate-600 group">
                   <div className="w-16 h-16 bg-slate-50 rounded-[1.8rem] flex items-center justify-center text-yellow-500 group-hover:bg-yellow-400 group-hover:text-slate-900 transition-all">
                     <Mail size={32} />
                   </div>
@@ -837,17 +840,17 @@ const SeekerHome: React.FC = () => {
                     admin@parkinghut.com
                   </span>
                 </div>
-                <div className="flex items-start gap-8 text-slate-600 group">
+                <div className="flex flex-col sm:flex-row items-center gap-8 text-slate-600 group">
                   <div className="w-16 h-16 bg-slate-50 rounded-[1.8rem] flex items-center justify-center text-yellow-500 flex-shrink-0 group-hover:bg-yellow-400 group-hover:text-slate-900 transition-all">
                     <MapPin size={32} />
                   </div>
-                  <span className="font-black text-2xl leading-tight mt-4">
+                  <span className="font-black text-2xl leading-tight text-center sm:text-left">
                     21, RK Nagar 2nd Street, Korukkupet
                   </span>
                 </div>
               </div>
             </div>
-            <div className="flex-1 bg-slate-50 p-12 rounded-[4rem]">
+            <div className="flex-1 w-full bg-slate-50 p-12 rounded-[4rem]">
               <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                   <input
@@ -880,109 +883,111 @@ const SeekerHome: React.FC = () => {
         </section>
       </div>
 
-      {/* Footer Section */}
+      {/* Footer Section - Wrapped in centered container */}
       <footer className="pt-32 pb-16 border-t border-slate-100 bg-white">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 mb-32">
-          <div className="col-span-1">
-            <div className="flex items-center gap-4 mb-10">
-              <div className="w-14 h-14 bg-yellow-400 rounded-2xl flex items-center justify-center font-black text-slate-900 text-2xl shadow-xl shadow-yellow-400/20">
-                P
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 mb-32 text-center md:text-left">
+            <div className="col-span-1 flex flex-col items-center md:items-start">
+              <div className="flex items-center gap-4 mb-10">
+                <div className="w-14 h-14 bg-yellow-400 rounded-2xl flex items-center justify-center font-black text-slate-900 text-2xl shadow-xl shadow-yellow-400/20">
+                  P
+                </div>
+                <span className="text-3xl font-black text-slate-900 tracking-tighter">
+                  Parking Hut
+                </span>
               </div>
-              <span className="text-3xl font-black text-slate-900 tracking-tighter">
-                Parking Hut
+              <p className="text-slate-400 font-medium mb-12 text-xl leading-relaxed">
+                Empowering individuals to share their space and earn, while
+                solving urban mobility challenges.
+              </p>
+              <div className="flex gap-6">
+                <button className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-slate-400 hover:text-yellow-500 hover:border-yellow-400 transition-all shadow-sm hover:shadow-xl">
+                  <Instagram size={28} />
+                </button>
+                <button className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-slate-400 hover:text-yellow-500 hover:border-yellow-400 transition-all shadow-sm hover:shadow-xl">
+                  <Facebook size={28} />
+                </button>
+                <button className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-slate-400 hover:text-yellow-500 hover:border-yellow-400 transition-all shadow-sm hover:shadow-xl">
+                  <XIcon size={24} />
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-col items-center md:items-start">
+              <h4 className="font-black text-slate-900 mb-10 uppercase tracking-widest text-xs">
+                Platform
+              </h4>
+              <ul className="space-y-6 text-slate-500 font-bold text-lg">
+                <li
+                  className="hover:text-yellow-500 cursor-pointer transition-colors"
+                  onClick={() => setActiveTab("spaces")}
+                >
+                  Explore Spots
+                </li>
+                <li className="hover:text-yellow-500 cursor-pointer transition-colors">
+                  List Your Garage
+                </li>
+                <li className="hover:text-yellow-500 cursor-pointer transition-colors">
+                  Safety Protocols
+                </li>
+                <li className="hover:text-yellow-500 cursor-pointer transition-colors">
+                  Help Center
+                </li>
+              </ul>
+            </div>
+            <div className="flex flex-col items-center md:items-start">
+              <h4 className="font-black text-slate-900 mb-10 uppercase tracking-widest text-xs">
+                Resources
+              </h4>
+              <ul className="space-y-6 text-slate-500 font-bold text-lg">
+                <li className="hover:text-yellow-500 cursor-pointer transition-colors">
+                  Pricing Guide
+                </li>
+                <li className="hover:text-yellow-500 cursor-pointer transition-colors">
+                  Provider Dashboard
+                </li>
+                <li className="hover:text-yellow-500 cursor-pointer transition-colors">
+                  Seeker App
+                </li>
+                <li className="hover:text-yellow-500 cursor-pointer transition-colors">
+                  Trust & Safety
+                </li>
+              </ul>
+            </div>
+            <div className="flex flex-col items-center md:items-start">
+              <h4 className="font-black text-slate-900 mb-10 uppercase tracking-widest text-xs">
+                Company
+              </h4>
+              <ul className="space-y-6 text-slate-500 font-bold text-lg">
+                <li className="hover:text-yellow-500 cursor-pointer transition-colors">
+                  Our Vision
+                </li>
+                <li className="hover:text-yellow-500 cursor-pointer transition-colors">
+                  Sustainability
+                </li>
+                <li className="hover:text-yellow-500 cursor-pointer transition-colors">
+                  Partner With Us
+                </li>
+                <li className="hover:text-yellow-500 cursor-pointer transition-colors">
+                  Press & Media
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="text-center space-y-6 pt-16 border-t border-slate-50">
+            <p className="text-slate-400 font-bold text-lg">
+              Copyright © 2026 Parking Hut - All Rights Reserved.
+            </p>
+            <div className="flex flex-wrap justify-center gap-6 md:gap-12 text-[12px] font-black uppercase tracking-widest text-slate-300">
+              <span className="hover:text-slate-500 cursor-pointer transition-colors">
+                Privacy Policy
+              </span>
+              <span className="hover:text-slate-500 cursor-pointer transition-colors">
+                Terms of Service
+              </span>
+              <span className="hover:text-slate-500 cursor-pointer transition-colors">
+                Cookie Policy
               </span>
             </div>
-            <p className="text-slate-400 font-medium mb-12 text-xl leading-relaxed">
-              Empowering individuals to share their space and earn, while
-              solving urban mobility challenges.
-            </p>
-            <div className="flex gap-6">
-              <button className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-slate-400 hover:text-yellow-500 hover:border-yellow-400 transition-all shadow-sm hover:shadow-xl">
-                <Instagram size={28} />
-              </button>
-              <button className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-slate-400 hover:text-yellow-500 hover:border-yellow-400 transition-all shadow-sm hover:shadow-xl">
-                <Facebook size={28} />
-              </button>
-              <button className="w-14 h-14 bg-white border border-slate-100 rounded-2xl flex items-center justify-center text-slate-400 hover:text-yellow-500 hover:border-yellow-400 transition-all shadow-sm hover:shadow-xl">
-                <XIcon size={24} />
-              </button>
-            </div>
-          </div>
-          <div>
-            <h4 className="font-black text-slate-900 mb-10 uppercase tracking-widest text-xs">
-              Platform
-            </h4>
-            <ul className="space-y-6 text-slate-500 font-bold text-lg">
-              <li
-                className="hover:text-yellow-500 cursor-pointer transition-colors"
-                onClick={() => setActiveTab("spaces")}
-              >
-                Explore Spots
-              </li>
-              <li className="hover:text-yellow-500 cursor-pointer transition-colors">
-                List Your Garage
-              </li>
-              <li className="hover:text-yellow-500 cursor-pointer transition-colors">
-                Safety Protocols
-              </li>
-              <li className="hover:text-yellow-500 cursor-pointer transition-colors">
-                Help Center
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-black text-slate-900 mb-10 uppercase tracking-widest text-xs">
-              Resources
-            </h4>
-            <ul className="space-y-6 text-slate-500 font-bold text-lg">
-              <li className="hover:text-yellow-500 cursor-pointer transition-colors">
-                Pricing Guide
-              </li>
-              <li className="hover:text-yellow-500 cursor-pointer transition-colors">
-                Provider Dashboard
-              </li>
-              <li className="hover:text-yellow-500 cursor-pointer transition-colors">
-                Seeker App
-              </li>
-              <li className="hover:text-yellow-500 cursor-pointer transition-colors">
-                Trust & Safety
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-black text-slate-900 mb-10 uppercase tracking-widest text-xs">
-              Company
-            </h4>
-            <ul className="space-y-6 text-slate-500 font-bold text-lg">
-              <li className="hover:text-yellow-500 cursor-pointer transition-colors">
-                Our Vision
-              </li>
-              <li className="hover:text-yellow-500 cursor-pointer transition-colors">
-                Sustainability
-              </li>
-              <li className="hover:text-yellow-500 cursor-pointer transition-colors">
-                Partner With Us
-              </li>
-              <li className="hover:text-yellow-500 cursor-pointer transition-colors">
-                Press & Media
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="text-center space-y-6">
-          <p className="text-slate-400 font-bold text-lg">
-            Copyright © 2026 Parking Hut - All Rights Reserved.
-          </p>
-          <div className="flex justify-center gap-12 text-[12px] font-black uppercase tracking-widest text-slate-300">
-            <span className="hover:text-slate-500 cursor-pointer transition-colors">
-              Privacy Policy
-            </span>
-            <span className="hover:text-slate-500 cursor-pointer transition-colors">
-              Terms of Service
-            </span>
-            <span className="hover:text-slate-500 cursor-pointer transition-colors">
-              Cookie Policy
-            </span>
           </div>
         </div>
       </footer>
