@@ -26,7 +26,6 @@ import ProviderDashboard from "./components/ProviderDashboard";
 import SeekerDashboard from "./components/SeekerDashboard";
 import SeekerHome from "./components/SeekerHome";
 import Bookings from "./components/Bookings";
-import LoadingScreen from "./components/LoadingScreen";
 
 declare global {
   interface Window {
@@ -34,12 +33,9 @@ declare global {
   }
 }
 
-const MIN_LOADING_TIME = 1500;
-
 const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabID>("home");
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showAuthOverlay, setShowAuthOverlay] = useState(false);
@@ -110,7 +106,6 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const startTime = Date.now();
     if (window.hideInitialLoader) window.hideInitialLoader();
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -121,17 +116,7 @@ const App: React.FC = () => {
       } else {
         setProfile(null);
       }
-
-      if (!isInitialized.current) {
-        const elapsedTime = Date.now() - startTime;
-        const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsedTime);
-        setTimeout(() => {
-          setLoading(false);
-          isInitialized.current = true;
-        }, remainingTime);
-      } else {
-        setLoading(false);
-      }
+      isInitialized.current = true;
     });
 
     return unsubscribe;
@@ -145,8 +130,6 @@ const App: React.FC = () => {
     setActiveTab(tab);
     setIsNavPanelOpen(false);
   };
-
-  if (loading) return <LoadingScreen />;
 
   const RestrictedView = ({
     title,
@@ -177,7 +160,7 @@ const App: React.FC = () => {
       value={{
         user,
         profile,
-        loading,
+        loading: false,
         refreshProfile,
         notify,
         updateNotify,

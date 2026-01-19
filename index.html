@@ -85,48 +85,6 @@
         -ms-overflow-style: none; /* IE and Edge */
         scrollbar-width: none; /* Firefox */
       }
-
-      #initial-loader {
-        position: fixed;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background-color: #f8fafc;
-        z-index: 10000;
-        transition:
-          opacity 0.5s ease-out,
-          visibility 0.5s;
-        padding-top: var(--safe-area-top);
-      }
-      .logo-box {
-        width: 96px;
-        height: 96px;
-        background-color: #f5b800;
-        border-radius: 2.2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 25px 50px -12px rgba(245, 184, 0, 0.3);
-        animation: bounce 2s infinite;
-      }
-      .logo-text {
-        font-size: 3rem;
-        font-weight: 900;
-        color: #0f172a;
-      }
-      @keyframes bounce {
-        0%,
-        100% {
-          transform: translateY(-10%);
-          animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-        }
-        50% {
-          transform: none;
-          animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-        }
-      }
     </style>
     <script type="importmap">
       {
@@ -147,74 +105,7 @@
     </script>
   </head>
   <body class="bg-slate-50 text-slate-900">
-    <!-- Static Loader outside root so it's visible BEFORE React loads -->
-    <div id="initial-loader">
-      <div class="logo-box">
-        <span class="logo-text">P</span>
-      </div>
-      <div style="margin-top: 2rem; text-align: center">
-        <h2
-          style="
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: #0f172a;
-            margin-bottom: 0.25rem;
-          "
-        >
-          Parking Hut
-        </h2>
-        <div
-          style="
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-            margin-top: 1rem;
-          "
-        >
-          <div
-            style="
-              width: 8px;
-              height: 8px;
-              background-color: #f5b800;
-              border-radius: 50%;
-              opacity: 0.6;
-            "
-          ></div>
-          <div
-            style="
-              width: 8px;
-              height: 8px;
-              background-color: #f5b800;
-              border-radius: 50%;
-              opacity: 0.6;
-            "
-          ></div>
-          <div
-            style="
-              width: 8px;
-              height: 8px;
-              background-color: #f5b800;
-              border-radius: 50%;
-              opacity: 0.6;
-            "
-          ></div>
-        </div>
-      </div>
-    </div>
-
     <div id="root"></div>
-
-    <script>
-      window.hideInitialLoader = function () {
-        const loader = document.getElementById("initial-loader");
-        if (loader) {
-          loader.style.opacity = "0";
-          setTimeout(() => {
-            loader.style.visibility = "hidden";
-          }, 500);
-        }
-      };
-    </script>
     <script type="module" src="./index.tsx"></script>
   </body>
 </html>
