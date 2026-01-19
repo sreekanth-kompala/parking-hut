@@ -187,7 +187,7 @@ const App: React.FC = () => {
       }}
     >
       <div className="min-h-screen bg-slate-50 pt-[calc(5rem+env(safe-area-inset-top))] md:pt-24 lg:pt-28 overflow-x-hidden">
-        {/* Navbar - Reduced horizontal padding for tighter side margins */}
+        {/* Navbar - Dynamic width scaling for header */}
         <header className="fixed top-0 left-0 right-0 z-[100] bg-white border-b border-slate-100 w-full transition-all px-4 md:px-6 lg:px-10 h-20 md:h-24 lg:h-28 flex items-center justify-between shadow-sm">
           <div
             className="flex items-center gap-3 md:gap-4 cursor-pointer group"
@@ -271,7 +271,6 @@ const App: React.FC = () => {
           </button>
         </header>
 
-        {/* Mobile NavPanel remains centered/sized correctly */}
         {isNavPanelOpen && (
           <div className="fixed inset-0 z-[1000] md:hidden">
             <div
@@ -394,8 +393,8 @@ const App: React.FC = () => {
           </div>
         )}
 
-        {/* Main Content - Widened max-w and reduced side padding to minimize margins */}
-        <main className="w-full max-w-[1600px] mx-auto px-2 sm:px-4 md:px-6">
+        {/* Updated Main Content - Scales up to 2400px for XXL displays */}
+        <main className="w-full max-w-[1600px] xl:max-w-[1900px] 2xl:max-w-[2400px] mx-auto px-2 sm:px-4 md:px-6 transition-all duration-500">
           {activeTab === "home" &&
             (profile?.role === "provider" ? (
               <ProviderDashboard />
@@ -418,7 +417,7 @@ const App: React.FC = () => {
                 <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-8 md:mb-12 tracking-tight">
                   Profile Settings
                 </h1>
-                <div className="bg-white p-8 md:p-12 lg:p-16 rounded-[2.5rem] md:rounded-[4rem] border border-slate-100 shadow-sm max-w-[1500px]">
+                <div className="bg-white p-8 md:p-12 lg:p-16 rounded-[2.5rem] md:rounded-[4rem] border border-slate-100 shadow-sm max-w-[1500px] xl:max-w-[1700px] 2xl:max-w-[2100px]">
                   <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 mb-8 md:mb-12 pb-8 md:pb-12 border-b border-slate-50 text-center md:text-left">
                     <div className="w-20 h-20 md:w-24 md:h-24 bg-yellow-100 text-yellow-600 rounded-[1.5rem] md:rounded-[2rem] flex items-center justify-center font-black text-2xl md:text-3xl uppercase">
                       {profile?.name?.substring(0, 2) || "??"}

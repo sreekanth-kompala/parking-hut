@@ -101,7 +101,7 @@ const AppPreviewMockup = () => (
           Popular Near You
         </h4>
         <span className="text-[8px] font-black text-yellow-600 uppercase tracking-widest">
-          See All &gt
+          See All &gt;
         </span>
       </div>
       <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
@@ -172,9 +172,7 @@ const GOOGLE_PLAY_STICKER =
 const SeekerHome: React.FC = () => {
   const { user, profile, setActiveTab } = useAuth();
   const [popularSpaces, setPopularSpaces] = useState<ParkingSpace[]>([]);
-  const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedSpace, setSelectedSpace] = useState<ParkingSpace | null>(null);
 
   useEffect(() => {
     const fetchSpaces = async () => {
@@ -257,100 +255,74 @@ const SeekerHome: React.FC = () => {
         }
       } catch (e) {
         console.error("Spaces fetch error:", e);
+      } finally {
+        setLoading(false);
       }
     };
 
-    let unsubscribeBookings = () => {};
-    if (user?.uid) {
-      const qBookings = query(
-        collection(db, "bookings"),
-        where("seekerId", "==", user.uid),
-        orderBy("createdAt", "desc"),
-      );
-      unsubscribeBookings = onSnapshot(
-        qBookings,
-        (snapshot) => {
-          const results: Booking[] = [];
-          snapshot.forEach((doc) =>
-            results.push({ id: doc.id, ...doc.data() } as Booking),
-          );
-          setBookings(results);
-          setLoading(false);
-        },
-        () => setLoading(false),
-      );
-    } else {
-      setLoading(false);
-    }
-
     fetchSpaces();
-    return () => unsubscribeBookings();
-  }, [user]);
-
-  const activeCount = useMemo(
-    () => bookings.filter((b) => b.status === "confirmed").length,
-    [bookings],
-  );
-  const totalCount = bookings.length;
+  }, []);
 
   return (
     <div className="w-full animate-fade-in-up">
-      {/* Expanded Hero Section - Container widened to max-w-[1500px] */}
-      <section className="relative overflow-hidden min-h-[75vh] flex flex-col justify-center items-center py-24 rounded-[4rem] mt-4 md:mt-8 text-center">
+      {/* Cinematic Ultra-Wide Hero Section with Compact Content */}
+      <section className="relative overflow-hidden min-h-[70vh] flex flex-col justify-center items-center py-16 rounded-[3rem] sm:rounded-[4rem] mt-4 md:mt-6 text-center transition-all duration-700">
         <div className="absolute inset-0 z-0">
           <img
             src={user ? WELCOME_BG_IMAGE : HERO_IMAGE_URL}
             className="w-full h-full object-cover transform scale-105"
             alt="Hero Background"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/40 to-slate-900/80"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-slate-900/80"></div>
         </div>
 
-        <div className="relative z-10 w-full max-w-[1500px] px-4 md:px-8 lg:px-12 flex flex-col items-center">
+        {/* Widened container but with scaled-down internal elements */}
+        <div className="relative z-10 w-full max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] px-6 md:px-12 lg:px-20 flex flex-col items-center">
           <div className="animate-fade-in-up flex flex-col items-center">
-            <h1 className="text-6xl md:text-9xl lg:text-[11rem] font-extrabold text-white tracking-tighter leading-[0.85] mb-12">
+            {/* Scaled-down Typography */}
+            <h1 className="text-4xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white tracking-tighter leading-tight mb-8 drop-shadow-xl">
               {user
                 ? `Hello, ${profile?.name?.split(" ")[0] || "Explorer"}! 👋`
                 : "The Smarter Way to Park"}
             </h1>
-            <p className="text-slate-200 font-medium text-2xl md:text-4xl mb-20 opacity-90 leading-relaxed max-w-6xl">
+            <p className="text-slate-200 font-medium text-lg md:text-2xl xl:text-3xl mb-16 opacity-90 leading-relaxed max-w-4xl xl:max-w-5xl">
               {user
                 ? "Your journey is already mapped out. Where are we heading next?"
                 : "Discover hidden parking gems in your neighborhood. Secure, verified, and affordable slots at your fingertips."}
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-12 w-full">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-10 w-full">
               {!user && (
                 <button
                   onClick={() => setActiveTab("spaces")}
-                  className="inline-flex items-center gap-6 bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-20 py-10 rounded-[2.5rem] font-black text-xl transition-all group shadow-2xl shadow-yellow-400/40 active:scale-[0.98]"
+                  className="inline-flex items-center gap-4 bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-12 py-6 rounded-2xl font-black text-lg transition-all group shadow-2xl shadow-yellow-400/40 active:scale-[0.98]"
                 >
                   EXPLORE NOW{" "}
                   <ArrowRight
-                    size={32}
-                    className="group-hover:translate-x-2 transition-transform"
+                    size={24}
+                    className="group-hover:translate-x-1 transition-transform"
                   />
                 </button>
               )}
 
-              <div className="flex items-center gap-10 bg-black/40 backdrop-blur-3xl p-8 rounded-[3.5rem] border border-white/10 shadow-2xl">
-                <div className="flex items-center gap-8 pr-10 border-r border-white/10">
+              <div className="flex items-center gap-8 bg-black/40 backdrop-blur-3xl p-6 rounded-3xl border border-white/10 shadow-2xl">
+                <div className="flex items-center gap-6 pr-8 border-r border-white/10">
                   <img
                     src={APP_STORE_STICKER}
                     alt="App Store"
-                    className="h-14 w-14 object-contain"
+                    className="h-10 w-10 object-contain"
                   />
                   <img
                     src={GOOGLE_PLAY_STICKER}
                     alt="Google Play"
-                    className="h-14 w-14 object-contain"
+                    className="h-10 w-10 object-contain"
                   />
                 </div>
                 <div className="text-left">
-                  <p className="text-xs font-black text-yellow-400 uppercase tracking-[0.3em] leading-none mb-3">
+                  <p className="text-[10px] font-black text-yellow-400 uppercase tracking-widest leading-none mb-2">
                     Coming Soon
                   </p>
-                  <p className="text-4xl font-black text-white leading-none tracking-tighter">
+                  <p className="text-2xl font-black text-white leading-none tracking-tight">
                     iOS & Android
                   </p>
                 </div>
@@ -360,68 +332,68 @@ const SeekerHome: React.FC = () => {
         </div>
       </section>
 
-      <div className="py-24 space-y-40">
-        {/* Featured Spots Section */}
+      <div className="py-20 space-y-32">
+        {/* Featured Spots Section - Scaled down cards */}
         <section>
-          <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left mb-20 gap-8">
+          <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left mb-16 gap-6 px-4">
             <div>
-              <h2 className="text-6xl md:text-8xl font-black text-slate-900 uppercase tracking-tighter leading-none">
+              <h2 className="text-3xl md:text-5xl xl:text-6xl font-black text-slate-900 uppercase tracking-tighter leading-none">
                 Featured Spots
               </h2>
-              <p className="text-slate-400 text-2xl font-medium mt-6">
+              <p className="text-slate-400 text-xl font-medium mt-4">
                 The most reliable locations in the grid.
               </p>
             </div>
             <button
               onClick={() => setActiveTab("spaces")}
-              className="text-sm font-black text-yellow-600 uppercase tracking-widest items-center gap-4 group bg-yellow-50 px-12 py-8 rounded-[2rem] hover:bg-yellow-100 transition-colors flex shadow-sm"
+              className="text-xs font-black text-yellow-600 uppercase tracking-widest items-center gap-3 group bg-yellow-50 px-10 py-5 rounded-2xl hover:bg-yellow-100 transition-colors flex shadow-sm"
             >
               See All{" "}
               <ArrowRight
-                size={24}
+                size={18}
                 className="group-hover:translate-x-1 transition-transform"
               />
             </button>
           </div>
 
-          <div className="flex gap-12 overflow-x-auto pb-14 scrollbar-hide px-4 -mx-4">
+          <div className="flex gap-10 overflow-x-auto pb-12 scrollbar-hide px-4 -mx-4 transition-all">
             {loading ? (
               [1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="min-w-[540px] h-[600px] bg-white border border-slate-100 rounded-[4rem] animate-pulse"
+                  className="min-w-[340px] xl:min-w-[440px] 2xl:min-w-[520px] h-[500px] bg-white border border-slate-100 rounded-[3rem] animate-pulse"
                 />
               ))
             ) : popularSpaces.length > 0 ? (
               popularSpaces.map((space) => (
                 <div
                   key={space.id}
-                  className="min-w-[540px] bg-white rounded-[4.5rem] border border-slate-100 shadow-xl overflow-hidden group hover:border-yellow-300 transition-all cursor-pointer flex flex-col"
+                  className="min-w-[340px] xl:min-w-[440px] 2xl:min-w-[520px] bg-white rounded-[3rem] border border-slate-100 shadow-lg overflow-hidden group hover:border-yellow-300 transition-all cursor-pointer flex flex-col"
                 >
-                  <div className="h-80 bg-slate-100 relative overflow-hidden m-6 rounded-[3.5rem]">
+                  <div className="h-56 xl:h-64 bg-slate-100 relative overflow-hidden m-4 rounded-[2.2rem]">
                     <img
                       src={
                         space.imageUrl ||
                         `https://picsum.photos/seed/${space.id}/800/600`
                       }
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       alt={space.title}
                     />
-                    <div className="absolute bottom-8 left-8 bg-white px-8 py-4 rounded-3xl text-sm font-black text-slate-900 shadow-2xl border border-slate-100">
+                    <div className="absolute bottom-6 left-6 bg-white px-6 py-3 rounded-2xl text-xs font-black text-slate-900 shadow-xl border border-slate-100">
                       ₹{space.pricing?.car?.hourly || 0}/hr
                     </div>
                   </div>
 
-                  <div className="p-10 pb-16 text-center flex-1 flex flex-col justify-center">
-                    <h4 className="font-black text-4xl text-slate-900 mb-4 tracking-tight">
+                  <div className="p-8 pb-12 text-center flex-1 flex flex-col justify-center">
+                    <h4 className="font-black text-2xl xl:text-3xl text-slate-900 mb-3 tracking-tight leading-tight">
                       {space.title}
                     </h4>
-                    <div className="flex items-center justify-center gap-3 text-slate-400 font-bold text-lg">
+                    <div className="flex items-center justify-center gap-2 text-slate-400 font-bold text-sm xl:text-base">
                       <MapPin
-                        size={26}
+                        size={18}
                         className="text-yellow-500 flex-shrink-0"
                       />
-                      <span className="truncate max-w-[420px]">
+                      <span className="truncate max-w-[280px] xl:max-w-[380px]">
                         {space.address}
                       </span>
                     </div>
@@ -429,8 +401,8 @@ const SeekerHome: React.FC = () => {
                 </div>
               ))
             ) : (
-              <div className="w-full p-32 bg-white border-2 border-dashed border-slate-100 rounded-[5rem] text-center">
-                <p className="text-slate-400 text-3xl font-bold">
+              <div className="w-full p-24 bg-white border-2 border-dashed border-slate-100 rounded-[4rem] text-center">
+                <p className="text-slate-400 text-2xl font-bold">
                   No spots discovered yet.
                 </p>
               </div>
@@ -438,48 +410,48 @@ const SeekerHome: React.FC = () => {
           </div>
         </section>
 
-        {/* Mobile App Section */}
-        <section className="bg-slate-900 p-20 md:p-32 lg:p-40 rounded-[6rem] flex flex-col lg:flex-row items-center gap-32 overflow-hidden relative">
-          <div className="absolute -top-40 -left-40 w-[800px] h-[800px] bg-yellow-400 rounded-full blur-[250px] opacity-10"></div>
-          <div className="flex-1 z-10 space-y-16 text-center lg:text-left flex flex-col items-center lg:items-start">
-            <div className="inline-flex items-center gap-6 px-8 py-4 bg-white/10 text-white rounded-full text-sm font-black uppercase tracking-widest border border-white/10">
-              <Smartphone size={24} className="text-yellow-400" /> COMING SOON
+        {/* Mobile App Section - Compact padding and typography */}
+        <section className="bg-slate-900 p-12 md:p-20 lg:p-24 rounded-[4rem] flex flex-col lg:flex-row items-center gap-24 overflow-hidden relative transition-all duration-500">
+          <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-yellow-400 rounded-full blur-[200px] opacity-10"></div>
+          <div className="flex-1 z-10 space-y-12 text-center lg:text-left flex flex-col items-center lg:items-start">
+            <div className="inline-flex items-center gap-4 px-6 py-3 bg-white/10 text-white rounded-full text-xs font-black uppercase tracking-widest border border-white/10">
+              <Smartphone size={18} className="text-yellow-400" /> COMING SOON
             </div>
-            <h2 className="text-7xl md:text-9xl font-black text-white leading-[0.85] tracking-tighter">
+            <h2 className="text-5xl md:text-7xl xl:text-8xl font-black text-white leading-none tracking-tighter">
               Parking Hut in your Pocket
             </h2>
-            <p className="text-slate-400 text-2xl md:text-3xl leading-relaxed font-medium max-w-5xl">
+            <p className="text-slate-400 text-xl md:text-2xl leading-relaxed font-medium max-w-2xl">
               Get real-time directions to your spot, instant push notifications
               for booking updates, and quick one-tap extensions right from our
               mobile app.
             </p>
-            <div className="flex flex-wrap justify-center lg:justify-start gap-10 pt-8">
-              <img src={APP_STORE_BADGE} alt="App Store" className="h-[84px]" />
+            <div className="flex flex-wrap justify-center lg:justify-start gap-8 pt-4">
+              <img src={APP_STORE_BADGE} alt="App Store" className="h-[60px]" />
               <img
                 src={GOOGLE_PLAY_BADGE}
                 alt="Play Store"
-                className="h-[84px]"
+                className="h-[60px]"
               />
             </div>
           </div>
           <div className="flex-1 w-full flex justify-center z-10">
-            <div className="relative w-[360px] h-[720px] bg-slate-800 rounded-[5rem] border-[12px] border-slate-700 shadow-2xl overflow-hidden group hover:scale-[1.02] transition-transform duration-500">
+            <div className="relative w-[300px] h-[600px] xl:w-[340px] xl:h-[680px] bg-slate-800 rounded-[4rem] border-[10px] border-slate-700 shadow-2xl overflow-hidden group hover:scale-[1.01] transition-transform duration-500">
               <AppPreviewMockup />
             </div>
           </div>
         </section>
 
-        {/* How It Works Section */}
-        <section className="bg-white p-24 md:p-40 rounded-[6rem] border border-slate-100 shadow-sm">
-          <div className="text-center mb-32">
-            <h2 className="text-6xl md:text-8xl font-black text-slate-900 mb-8 tracking-tighter">
+        {/* How It Works Section - Smaller icons and text */}
+        <section className="bg-white p-16 md:p-24 rounded-[4rem] border border-slate-100 shadow-sm transition-all duration-500">
+          <div className="text-center mb-24">
+            <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter">
               Simple 1-2-3 Booking
             </h2>
-            <p className="text-slate-400 font-medium text-3xl">
+            <p className="text-slate-400 font-medium text-2xl">
               Revolutionizing urban parking one slot at a time.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-32">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-24">
             {[
               {
                 icon: Search,
@@ -498,13 +470,13 @@ const SeekerHome: React.FC = () => {
               },
             ].map((step, i) => (
               <div key={i} className="text-center group">
-                <div className="w-40 h-40 bg-slate-50 text-slate-900 rounded-[4rem] flex items-center justify-center mx-auto mb-12 group-hover:bg-yellow-400 group-hover:scale-110 transition-all duration-500 shadow-sm">
-                  <step.icon size={64} strokeWidth={2.5} />
+                <div className="w-32 h-32 bg-slate-50 text-slate-900 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 group-hover:bg-yellow-400 group-hover:scale-105 transition-all duration-500 shadow-sm">
+                  <step.icon size={48} strokeWidth={2.5} />
                 </div>
-                <h4 className="text-4xl font-black text-slate-900 mb-6">
+                <h4 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">
                   {step.title}
                 </h4>
-                <p className="text-slate-500 font-medium leading-relaxed text-2xl">
+                <p className="text-slate-500 font-medium leading-relaxed text-lg">
                   {step.desc}
                 </p>
               </div>
@@ -513,40 +485,39 @@ const SeekerHome: React.FC = () => {
         </section>
       </div>
 
-      {/* Footer - Container widened to max-w-[1500px] */}
-      <footer className="pt-40 pb-20 border-t border-slate-100 bg-white">
-        <div className="max-w-[1500px] mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-24 mb-40 text-center md:text-left">
+      <footer className="pt-24 pb-12 border-t border-slate-100 bg-white">
+        <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 mb-24 text-center md:text-left">
             <div className="col-span-1 flex flex-col items-center md:items-start">
-              <div className="flex items-center gap-5 mb-12">
-                <div className="w-16 h-16 bg-yellow-400 rounded-3xl flex items-center justify-center font-black text-slate-900 text-3xl shadow-xl">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-12 bg-yellow-400 rounded-2xl flex items-center justify-center font-black text-slate-900 text-2xl shadow-lg">
                   P
                 </div>
-                <span className="text-4xl font-black text-slate-900 tracking-tighter">
+                <span className="text-3xl font-black text-slate-900 tracking-tighter">
                   Parking Hut
                 </span>
               </div>
-              <p className="text-slate-400 font-medium mb-16 text-2xl leading-relaxed">
+              <p className="text-slate-400 font-medium mb-12 text-lg leading-relaxed">
                 Empowering individuals to share their space and earn, while
                 solving urban mobility challenges.
               </p>
-              <div className="flex gap-8">
-                <button className="w-16 h-16 bg-white border border-slate-100 rounded-3xl flex items-center justify-center text-slate-400 hover:text-yellow-500 transition-all">
-                  <Instagram size={32} />
+              <div className="flex gap-6">
+                <button className="w-12 h-12 bg-white border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 hover:text-yellow-500 transition-all">
+                  <Instagram size={24} />
                 </button>
-                <button className="w-16 h-16 bg-white border border-slate-100 rounded-3xl flex items-center justify-center text-slate-400 hover:text-yellow-500 transition-all">
-                  <Facebook size={32} />
+                <button className="w-12 h-12 bg-white border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 hover:text-yellow-500 transition-all">
+                  <Facebook size={24} />
                 </button>
-                <button className="w-16 h-16 bg-white border border-slate-100 rounded-3xl flex items-center justify-center text-slate-400 hover:text-yellow-500 transition-all">
-                  <XIcon size={28} />
+                <button className="w-12 h-12 bg-white border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 hover:text-yellow-500 transition-all">
+                  <XIcon size={20} />
                 </button>
               </div>
             </div>
             <div className="flex flex-col items-center md:items-start">
-              <h4 className="font-black text-slate-900 mb-12 uppercase tracking-widest text-sm">
+              <h4 className="font-black text-slate-900 mb-8 uppercase tracking-widest text-xs">
                 Platform
               </h4>
-              <ul className="space-y-8 text-slate-500 font-bold text-xl">
+              <ul className="space-y-6 text-slate-500 font-bold text-base">
                 <li
                   className="hover:text-yellow-500 cursor-pointer transition-colors"
                   onClick={() => setActiveTab("spaces")}
@@ -565,10 +536,10 @@ const SeekerHome: React.FC = () => {
               </ul>
             </div>
             <div className="flex flex-col items-center md:items-start">
-              <h4 className="font-black text-slate-900 mb-12 uppercase tracking-widest text-sm">
+              <h4 className="font-black text-slate-900 mb-8 uppercase tracking-widest text-xs">
                 Resources
               </h4>
-              <ul className="space-y-8 text-slate-500 font-bold text-xl">
+              <ul className="space-y-6 text-slate-500 font-bold text-base">
                 <li className="hover:text-yellow-500 cursor-pointer transition-colors">
                   Pricing Guide
                 </li>
@@ -584,10 +555,10 @@ const SeekerHome: React.FC = () => {
               </ul>
             </div>
             <div className="flex flex-col items-center md:items-start">
-              <h4 className="font-black text-slate-900 mb-12 uppercase tracking-widest text-sm">
+              <h4 className="font-black text-slate-900 mb-8 uppercase tracking-widest text-xs">
                 Company
               </h4>
-              <ul className="space-y-8 text-slate-500 font-bold text-xl">
+              <ul className="space-y-6 text-slate-500 font-bold text-base">
                 <li className="hover:text-yellow-500 cursor-pointer transition-colors">
                   Our Vision
                 </li>
@@ -603,11 +574,11 @@ const SeekerHome: React.FC = () => {
               </ul>
             </div>
           </div>
-          <div className="text-center space-y-8 pt-20 border-t border-slate-50">
-            <p className="text-slate-400 font-bold text-xl">
+          <div className="text-center space-y-6 pt-16 border-t border-slate-50">
+            <p className="text-slate-400 font-bold text-base">
               Copyright © 2026 Parking Hut - All Rights Reserved.
             </p>
-            <div className="flex flex-wrap justify-center gap-16 text-[14px] font-black uppercase tracking-widest text-slate-300">
+            <div className="flex flex-wrap justify-center gap-12 text-[12px] font-black uppercase tracking-widest text-slate-300">
               <span>Privacy Policy</span>
               <span>Terms of Service</span>
               <span>Cookie Policy</span>
