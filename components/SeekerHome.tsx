@@ -50,6 +50,12 @@ import {
   Quote,
 } from "lucide-react";
 
+const FEATURED_IMAGES = [
+  "https://i.postimg.cc/2S3zSP8r/Skyline-Parking-Garage.jpg",
+  "https://i.postimg.cc/Jzt1z94R/Maruthi-Garage.jpg",
+  "https://i.postimg.cc/BntqndZr/Broadway-Parking-Garage.jpg",
+];
+
 // Custom X (formerly Twitter) logo component
 const XIcon = ({ size = 20 }: { size?: number }) => (
   <svg
@@ -191,12 +197,10 @@ const WELCOME_BG_IMAGE =
 const PRIORITY_SECTION_IMAGE =
   "https://images.unsplash.com/photo-1470224114660-3f6686c562eb?auto=format&fit=crop&q=80&w=1200";
 
-const CHENNAI_TNAGAR_IMAGE =
-  "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&get=80&w=800";
-const CHENNAI_KORUKKUPET_IMAGE =
-  "https://images.unsplash.com/photo-1626014303757-646c2162a571?auto=format&fit=crop&q=80&w=800";
-const CHENNAI_BROADWAY_IMAGE =
-  "https://images.unsplash.com/photo-1625890210164-968940562e1e?auto=format&fit=crop&q=80&w=800";
+// Updated to point to the local asset folder
+const CHENNAI_TNAGAR_IMAGE = "./assets/skyline.jpg";
+const CHENNAI_KORUKKUPET_IMAGE = "./assets/maruthi.jpg";
+const CHENNAI_BROADWAY_IMAGE = "./assets/broadway.jpg";
 
 const APP_STORE_BADGE =
   "https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg";
@@ -407,17 +411,14 @@ const SeekerHome: React.FC = () => {
                 />
               ))
             ) : popularSpaces.length > 0 ? (
-              popularSpaces.map((space) => (
+              popularSpaces.map((space, index) => (
                 <div
                   key={space.id}
                   className="min-w-[340px] xl:min-w-[440px] 2xl:min-w-[520px] bg-white rounded-[3rem] border border-slate-100 shadow-lg overflow-hidden group hover:border-yellow-300 transition-all cursor-pointer flex flex-col"
                 >
                   <div className="h-56 xl:h-64 bg-slate-100 relative overflow-hidden m-4 rounded-[2.2rem]">
                     <img
-                      src={
-                        space.imageUrl ||
-                        `https://picsum.photos/seed/${space.id}/800/600`
-                      }
+                      src={FEATURED_IMAGES[index % FEATURED_IMAGES.length]}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       alt={space.title}
                     />
@@ -661,25 +662,25 @@ const SeekerHome: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
               {[
                 {
-                  name: "Rahul Sharma",
+                  name: "Raja Shanmugam",
                   role: "Daily Commuter",
                   text: "Found a secure spot right next to my office for half the price of the public garage. The SMS alerts are a game changer.",
                   rating: 5,
-                  img: "11",
+                  img: "https://i.postimg.cc/9XYv9JDj/userrating1.jpg",
                 },
                 {
-                  name: "Priya V.",
+                  name: "Diya V",
                   role: "Garage Provider",
                   text: "My empty driveway now pays for my monthly groceries. The verification process was quick and professional.",
                   rating: 5,
-                  img: "12",
+                  img: "https://i.postimg.cc/050LScbh/userrating2.jpg",
                 },
                 {
-                  name: "Amit Kumar",
+                  name: "Arya Kannan",
                   role: "Frequent Traveler",
                   text: "Booking a 10-day spot near the station was so easy. I felt safe leaving my car in a verified gated residence.",
                   rating: 5,
-                  img: "13",
+                  img: "https://i.postimg.cc/hP4N1Tmq/userrating3.png",
                 },
               ].map((t, i) => (
                 <div
@@ -695,7 +696,7 @@ const SeekerHome: React.FC = () => {
                   <div className="flex items-center gap-6 pt-10 border-t border-slate-50">
                     <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-50 flex-shrink-0">
                       <img
-                        src={`https://i.pravatar.cc/150?u=${t.img}`}
+                        src={t.img}
                         className="w-full h-full object-cover"
                         alt={t.name}
                       />
@@ -816,13 +817,13 @@ const SeekerHome: React.FC = () => {
                 {
                   icon: Mail,
                   label: "SUPPORT EMAIL",
-                  value: "hello@parkinghut.com",
+                  value: "admin@parkinghut.com",
                   iconColor: "text-blue-500",
                 },
                 {
                   icon: Phone,
                   label: "SUPPORT LINE",
-                  value: "+91 90000 12345",
+                  value: "+91 99401 23099",
                   iconColor: "text-green-500",
                 },
                 {
