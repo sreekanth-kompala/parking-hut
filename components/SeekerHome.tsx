@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
   collection,
   query,
@@ -29,7 +29,7 @@ import {
   CloudRain,
   Battery,
   Info,
-  User as HostIcon,
+  User as UserIcon,
   Car,
   Bike,
   LogIn,
@@ -44,6 +44,10 @@ import {
   Smartphone,
   Apple,
   Play,
+  Send,
+  Home as HomeIcon,
+  Star,
+  Quote,
 } from "lucide-react";
 
 // Custom X (formerly Twitter) logo component
@@ -61,33 +65,38 @@ const XIcon = ({ size = 20 }: { size?: number }) => (
 
 // High-fidelity CSS Mockup for the App Preview
 const AppPreviewMockup = () => (
-  <div className="w-full h-full bg-[#f8fafc] flex flex-col p-4 text-left select-none overflow-hidden font-sans">
-    <div className="flex justify-between items-center mb-6 px-1">
+  <div className="w-full h-full bg-[#f8fafc] flex flex-col p-5 text-left select-none overflow-hidden font-sans">
+    {/* Status Bar */}
+    <div className="flex justify-between items-center mb-4 px-1">
       <div className="text-[10px] font-bold text-slate-900">9:41</div>
-      <div className="flex gap-1">
-        <div className="w-3 h-3 bg-slate-900 rounded-full opacity-20"></div>
-        <div className="w-3 h-3 bg-slate-900 rounded-full opacity-20"></div>
+      <div className="flex gap-1.5">
+        <div className="w-4 h-4 bg-slate-900 rounded-full opacity-20"></div>
+        <div className="w-4 h-4 bg-slate-900 rounded-full opacity-20"></div>
       </div>
     </div>
+
+    {/* Header */}
     <div className="mb-6">
-      <h3 className="text-xl font-black text-[#0f172a] leading-tight">
+      <h3 className="text-2xl font-black text-[#0f172a] leading-tight">
         Hello, John! 👋
       </h3>
-      <p className="text-xs font-medium text-slate-400">
+      <p className="text-[11px] font-medium text-slate-400">
         Ready for your next journey?
       </p>
     </div>
-    <div className="grid grid-cols-2 gap-3 mb-8">
-      <div className="bg-[#0f172a] p-4 rounded-[1.8rem] text-white shadow-lg">
-        <Zap size={16} fill="#F5B800" className="text-yellow-400 mb-2" />
-        <div className="text-2xl font-black leading-none mb-1">1</div>
+
+    {/* Stats Cards */}
+    <div className="grid grid-cols-2 gap-3 mb-6">
+      <div className="bg-[#0f172a] p-5 rounded-[2.2rem] text-white shadow-xl">
+        <Zap size={18} fill="#F5B800" className="text-yellow-400 mb-3" />
+        <div className="text-3xl font-black leading-none mb-1">1</div>
         <div className="text-[7px] font-black uppercase tracking-widest opacity-60">
           Active Bookings
         </div>
       </div>
-      <div className="bg-white p-4 rounded-[1.8rem] border border-slate-100 shadow-sm">
-        <History size={16} className="text-blue-500 mb-2" />
-        <div className="text-2xl font-black text-slate-900 leading-none mb-1">
+      <div className="bg-white p-5 rounded-[2.2rem] border border-slate-100 shadow-sm">
+        <History size={18} className="text-blue-500 mb-3" />
+        <div className="text-3xl font-black text-slate-900 leading-none mb-1">
           1
         </div>
         <div className="text-[7px] font-black text-slate-400 uppercase tracking-widest">
@@ -95,52 +104,81 @@ const AppPreviewMockup = () => (
         </div>
       </div>
     </div>
+
+    {/* Popular Near You Section */}
     <div className="mb-6">
       <div className="flex justify-between items-center mb-4">
-        <h4 className="text-xs font-black text-slate-900 uppercase tracking-tight">
+        <h4 className="text-[13px] font-black text-slate-900 uppercase tracking-tight">
           Popular Near You
         </h4>
-        <span className="text-[8px] font-black text-yellow-600 uppercase tracking-widest">
-          See All &gt;
+        <span className="text-[9px] font-black text-yellow-600 uppercase tracking-widest flex items-center gap-1">
+          SEE ALL <ArrowRight size={10} strokeWidth={3} />
         </span>
       </div>
-      <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-        <div className="h-24 bg-slate-100 relative">
+      <div className="bg-white rounded-[2.2rem] border border-slate-100 shadow-sm overflow-hidden">
+        <div className="h-28 bg-slate-100 relative">
           <img
             src="https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&q=80&w=400"
             className="w-full h-full object-cover grayscale opacity-60"
             alt=""
           />
-          <div className="absolute bottom-2 left-2 bg-white/90 px-2 py-0.5 rounded-lg text-[8px] font-black text-slate-900 border border-slate-100">
+          <div className="absolute bottom-3 left-3 bg-white px-2.5 py-1 rounded-lg text-[9px] font-black text-slate-900 shadow-sm">
             ₹10/hr
           </div>
         </div>
-        <div className="p-3">
-          <h5 className="font-black text-[10px] text-slate-900 mb-0.5">
-            Maruthi Garage
+        <div className="p-4">
+          <h5 className="font-black text-[12px] text-slate-900 mb-0.5">
+            Skyline Parking Garage
           </h5>
-          <p className="text-[8px] text-slate-400 font-medium flex items-center gap-0.5">
-            <MapPin size={8} className="text-yellow-500" /> RK Nagar 2nd Street
+          <p className="text-[9px] text-slate-400 font-medium flex items-center gap-1">
+            <MapPin size={10} className="text-yellow-500" /> Ranganathan Street
           </p>
         </div>
       </div>
     </div>
-    <div className="mt-auto -mx-4 -mb-4 bg-white border-t border-slate-100 px-6 py-4 flex justify-between items-center">
+
+    {/* Recent Activity Section */}
+    <div className="mb-6">
+      <h4 className="text-[13px] font-black text-slate-900 uppercase tracking-tight mb-4">
+        Recent Activity
+      </h4>
+      <div className="bg-white p-4 rounded-[1.8rem] border border-slate-100 shadow-sm flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
+            <Clock size={18} />
+          </div>
+          <div>
+            <p className="text-[11px] font-black text-slate-900">
+              Maruthi Garage
+            </p>
+            <p className="text-[9px] text-slate-400 font-bold">
+              1/18/2026 • ₹1010
+            </p>
+          </div>
+        </div>
+        <span className="px-2 py-0.5 bg-green-50 text-green-600 rounded-lg text-[8px] font-black uppercase border border-green-100">
+          CONFIRMED
+        </span>
+      </div>
+    </div>
+
+    {/* Bottom Navigation */}
+    <div className="mt-auto -mx-5 -mb-5 bg-white border-t border-slate-100 px-8 py-5 flex justify-between items-center shadow-inner">
       <div className="flex flex-col items-center gap-1 text-yellow-600">
-        <Search size={14} />
-        <span className="text-[6px] font-black">HOME</span>
+        <HomeIcon size={16} fill="currentColor" />
+        <span className="text-[7px] font-black">HOME</span>
       </div>
       <div className="flex flex-col items-center gap-1 text-slate-300">
-        <MapPin size={14} />
-        <span className="text-[6px] font-black">EXPLORE</span>
+        <Search size={16} />
+        <span className="text-[7px] font-black">EXPLORE</span>
       </div>
       <div className="flex flex-col items-center gap-1 text-slate-300">
-        <Calendar size={14} />
-        <span className="text-[6px] font-black">BOOKINGS</span>
+        <Calendar size={16} />
+        <span className="text-[7px] font-black">BOOKINGS</span>
       </div>
       <div className="flex flex-col items-center gap-1 text-slate-300">
-        <HostIcon size={14} />
-        <span className="text-[6px] font-black">PROFILE</span>
+        <UserIcon size={16} />
+        <span className="text-[7px] font-black">PROFILE</span>
       </div>
     </div>
   </div>
@@ -154,7 +192,7 @@ const PRIORITY_SECTION_IMAGE =
   "https://images.unsplash.com/photo-1470224114660-3f6686c562eb?auto=format&fit=crop&q=80&w=1200";
 
 const CHENNAI_TNAGAR_IMAGE =
-  "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&q=80&w=800";
+  "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&get=80&w=800";
 const CHENNAI_KORUKKUPET_IMAGE =
   "https://images.unsplash.com/photo-1626014303757-646c2162a571?auto=format&fit=crop&q=80&w=800";
 const CHENNAI_BROADWAY_IMAGE =
@@ -170,7 +208,7 @@ const GOOGLE_PLAY_STICKER =
   "https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg";
 
 const SeekerHome: React.FC = () => {
-  const { user, profile, setActiveTab } = useAuth();
+  const { user, profile, setActiveTab, notify } = useAuth();
   const [popularSpaces, setPopularSpaces] = useState<ParkingSpace[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -263,9 +301,15 @@ const SeekerHome: React.FC = () => {
     fetchSpaces();
   }, []);
 
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    notify("Thank you! Our support team will contact you shortly.", "success");
+    (e.target as HTMLFormElement).reset();
+  };
+
   return (
     <div className="w-full animate-fade-in-up">
-      {/* Cinematic Ultra-Wide Hero Section with Compact Content */}
+      {/* Cinematic Ultra-Wide Hero Section */}
       <section className="relative overflow-hidden min-h-[70vh] flex flex-col justify-center items-center py-16 rounded-[3rem] sm:rounded-[4rem] mt-4 md:mt-6 text-center transition-all duration-700">
         <div className="absolute inset-0 z-0">
           <img
@@ -408,7 +452,50 @@ const SeekerHome: React.FC = () => {
           </div>
         </section>
 
-        {/* Safety & Convenience Priority Section - Re-added as requested */}
+        {/* How It Works Section */}
+        <section className="bg-white p-16 md:p-24 rounded-[4rem] border border-slate-100 shadow-sm transition-all duration-500">
+          <div className="text-center mb-24">
+            <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter">
+              Simple 1-2-3 Booking
+            </h2>
+            <p className="text-slate-400 font-medium text-2xl">
+              Revolutionizing urban parking one slot at a time.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-24">
+            {[
+              {
+                icon: Search,
+                title: "Find",
+                desc: "Search for spaces near your destination using our real-time grid.",
+              },
+              {
+                icon: Calendar,
+                title: "Book",
+                desc: "Select your duration and vehicle type. Instant confirmation via SMS.",
+              },
+              {
+                icon: MapPin,
+                title: "Park",
+                desc: "Navigate to your spot and park with confidence. No more circling!",
+              },
+            ].map((step, i) => (
+              <div key={i} className="text-center group">
+                <div className="w-32 h-32 bg-slate-50 text-slate-900 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 group-hover:bg-yellow-400 group-hover:text-white transition-all duration-500 shadow-sm">
+                  <step.icon size={48} strokeWidth={2.5} />
+                </div>
+                <h4 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">
+                  {step.title}
+                </h4>
+                <p className="text-slate-500 font-medium leading-relaxed text-lg">
+                  {step.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Safety & Convenience Priority Section */}
         <section className="px-4">
           <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto bg-white rounded-[4rem] border border-slate-100 overflow-hidden shadow-sm flex flex-col lg:flex-row items-stretch">
             <div className="flex-1 p-12 md:p-16 lg:p-20 xl:p-24 flex flex-col justify-center">
@@ -478,77 +565,293 @@ const SeekerHome: React.FC = () => {
           </div>
         </section>
 
-        {/* Mobile App Section */}
-        <section className="bg-slate-900 p-12 md:p-20 lg:p-24 rounded-[4rem] flex flex-col lg:flex-row items-center gap-24 overflow-hidden relative transition-all duration-500">
-          <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-yellow-400 rounded-full blur-[200px] opacity-10"></div>
-          <div className="flex-1 z-10 space-y-12 text-center lg:text-left flex flex-col items-center lg:items-start">
-            <div className="inline-flex items-center gap-4 px-6 py-3 bg-white/10 text-white rounded-full text-xs font-black uppercase tracking-widest border border-white/10">
-              <Smartphone size={18} className="text-yellow-400" /> COMING SOON
-            </div>
-            <h2 className="text-5xl md:text-7xl xl:text-8xl font-black text-white leading-none tracking-tighter">
-              Parking Hut in your Pocket
-            </h2>
-            <p className="text-slate-400 text-xl md:text-2xl leading-relaxed font-medium max-w-2xl">
-              Get real-time directions to your spot, instant push notifications
-              for booking updates, and quick one-tap extensions right from our
-              mobile app.
-            </p>
-            <div className="flex flex-wrap justify-center lg:justify-start gap-8 pt-4">
-              <img src={APP_STORE_BADGE} alt="App Store" className="h-[60px]" />
-              <img
-                src={GOOGLE_PLAY_BADGE}
-                alt="Play Store"
-                className="h-[60px]"
-              />
-            </div>
-          </div>
-          <div className="flex-1 w-full flex justify-center z-10">
-            <div className="relative w-[300px] h-[600px] xl:w-[340px] xl:h-[680px] bg-slate-800 rounded-[4rem] border-[10px] border-slate-700 shadow-2xl overflow-hidden group hover:scale-[1.01] transition-transform duration-500">
-              <AppPreviewMockup />
+        {/* Partner with Us Section */}
+        <section className="px-4">
+          <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto bg-[#0f172a] rounded-[4rem] p-16 md:p-24 text-center flex flex-col items-center justify-center relative overflow-hidden group shadow-2xl shadow-slate-900/40">
+            <div className="absolute inset-0 bg-yellow-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+            <div className="relative z-10 space-y-8 max-w-2xl">
+              <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-none">
+                Partner with Us
+              </h2>
+              <p className="text-slate-400 text-xl md:text-2xl font-medium leading-relaxed">
+                Transform your empty garage into a steady revenue stream. Join
+                thousands of providers in the Grid.
+              </p>
+              <button
+                onClick={() => setActiveTab("profile")}
+                className="mt-6 px-12 py-5 bg-white hover:bg-yellow-400 text-slate-900 font-black rounded-2xl text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl"
+              >
+                START LISTING
+              </button>
             </div>
           </div>
         </section>
 
-        {/* How It Works Section */}
-        <section className="bg-white p-16 md:p-24 rounded-[4rem] border border-slate-100 shadow-sm transition-all duration-500">
-          <div className="text-center mb-24">
-            <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter">
-              Simple 1-2-3 Booking
-            </h2>
-            <p className="text-slate-400 font-medium text-2xl">
-              Revolutionizing urban parking one slot at a time.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-24">
-            {[
-              {
-                icon: Search,
-                title: "Find",
-                desc: "Search for spaces near your destination using our real-time grid.",
-              },
-              {
-                icon: Calendar,
-                title: "Book",
-                desc: "Select your duration and vehicle type. Instant confirmation via SMS.",
-              },
-              {
-                icon: MapPin,
-                title: "Park",
-                desc: "Navigate to your spot and park with confidence. No more circling!",
-              },
-            ].map((step, i) => (
-              <div key={i} className="text-center group">
-                <div className="w-32 h-32 bg-slate-50 text-slate-900 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 group-hover:bg-yellow-400 group-hover:scale-105 transition-all duration-500 shadow-sm">
-                  <step.icon size={48} strokeWidth={2.5} />
-                </div>
-                <h4 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">
-                  {step.title}
-                </h4>
-                <p className="text-slate-500 font-medium leading-relaxed text-lg">
-                  {step.desc}
+        {/* Community Impact & Testimonials Section */}
+        <section className="space-y-32">
+          <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-12 bg-white rounded-[3rem] border border-slate-100 shadow-sm items-center divide-y md:divide-y-0 md:divide-x divide-slate-50">
+              <div className="px-12 py-6 text-center">
+                <p className="text-5xl lg:text-6xl font-black text-slate-900 tracking-tighter mb-2">
+                  NA
+                </p>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                  Verified Spots
                 </p>
               </div>
-            ))}
+              <div className="px-12 py-6 text-center">
+                <p className="text-5xl lg:text-6xl font-black text-yellow-400 tracking-tighter mb-2">
+                  NA
+                </p>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                  Booked Hours
+                </p>
+              </div>
+              <div className="px-12 py-6 text-center">
+                <p className="text-5xl lg:text-6xl font-black text-slate-900 tracking-tighter mb-2">
+                  NA
+                </p>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                  Provider Earnings
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-4">
+            <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+              <div className="max-w-2xl">
+                <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter leading-none mb-6">
+                  Voices from the Grid
+                </h2>
+                <p className="text-slate-400 text-xl font-medium leading-relaxed">
+                  See how Parking Hut is changing the way people move and earn
+                  across the city.
+                </p>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex -space-x-4">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className="w-12 h-12 rounded-full border-4 border-white overflow-hidden bg-slate-100"
+                    >
+                      <img
+                        src={`https://i.pravatar.cc/150?u=${i + 10}`}
+                        alt="User"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="pl-4">
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">
+                    Community Trusted
+                  </p>
+                  <div className="flex text-yellow-400 gap-0.5">
+                    <Star size={14} fill="currentColor" />
+                    <Star size={14} fill="currentColor" />
+                    <Star size={14} fill="currentColor" />
+                    <Star size={14} fill="currentColor" />
+                    <Star size={14} fill="currentColor" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+              {[
+                {
+                  name: "Rahul Sharma",
+                  role: "Daily Commuter",
+                  text: "Found a secure spot right next to my office for half the price of the public garage. The SMS alerts are a game changer.",
+                  rating: 5,
+                  img: "11",
+                },
+                {
+                  name: "Priya V.",
+                  role: "Garage Provider",
+                  text: "My empty driveway now pays for my monthly groceries. The verification process was quick and professional.",
+                  rating: 5,
+                  img: "12",
+                },
+                {
+                  name: "Amit Kumar",
+                  role: "Frequent Traveler",
+                  text: "Booking a 10-day spot near the station was so easy. I felt safe leaving my car in a verified gated residence.",
+                  rating: 5,
+                  img: "13",
+                },
+              ].map((t, i) => (
+                <div
+                  key={i}
+                  className="bg-white p-12 rounded-[3.5rem] border border-slate-100 shadow-sm flex flex-col hover:border-yellow-400 transition-all group"
+                >
+                  <div className="mb-10 text-yellow-100 group-hover:text-yellow-400 transition-colors">
+                    <Quote size={40} fill="currentColor" strokeWidth={0} />
+                  </div>
+                  <p className="text-slate-500 font-medium text-lg leading-relaxed flex-1 mb-10 italic">
+                    "{t.text}"
+                  </p>
+                  <div className="flex items-center gap-6 pt-10 border-t border-slate-50">
+                    <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-50 flex-shrink-0">
+                      <img
+                        src={`https://i.pravatar.cc/150?u=${t.img}`}
+                        className="w-full h-full object-cover"
+                        alt={t.name}
+                      />
+                    </div>
+                    <div>
+                      <h4 className="font-black text-slate-900 text-lg leading-none mb-1">
+                        {t.name}
+                      </h4>
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        {t.role}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Mobile App Section */}
+        <section className="bg-[#0f172a] p-12 md:p-20 lg:p-24 rounded-[4rem] flex flex-col lg:flex-row items-center gap-16 overflow-hidden relative transition-all duration-500">
+          <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-yellow-400 rounded-full blur-[200px] opacity-10"></div>
+          <div className="flex-1 z-10 space-y-12 text-center lg:text-left flex flex-col items-center lg:items-start">
+            <div className="inline-flex items-center gap-4 px-6 py-2.5 bg-white/5 text-white/60 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-white/10">
+              <Smartphone size={16} className="text-yellow-400" /> COMING SOON
+            </div>
+            <h2 className="text-6xl md:text-8xl xl:text-9xl font-black text-white leading-[0.9] tracking-tighter max-w-xl">
+              Parking Hut in your Pocket
+            </h2>
+            <p className="text-slate-400 text-xl md:text-2xl leading-relaxed font-medium max-w-xl">
+              Get real-time directions to your spot, instant push notifications
+              for booking updates, and quick one-tap extensions right from our
+              mobile app.
+            </p>
+            <div className="flex flex-wrap justify-center lg:justify-start gap-6 pt-4">
+              <img
+                src={APP_STORE_BADGE}
+                alt="App Store"
+                className="h-[65px] hover:scale-105 transition-transform cursor-pointer"
+              />
+              <img
+                src={GOOGLE_PLAY_BADGE}
+                alt="Play Store"
+                className="h-[65px] hover:scale-105 transition-transform cursor-pointer"
+              />
+            </div>
+          </div>
+
+          <div className="flex-1 w-full flex justify-center lg:justify-end z-10 lg:pr-10">
+            <div className="relative w-[340px] h-[680px] xl:w-[380px] xl:h-[760px] bg-[#0f172a] rounded-[4.5rem] border-[12px] border-[#1e293b] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden group hover:scale-[1.02] transition-all duration-700">
+              <AppPreviewMockup />
+              <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-white/5 via-transparent to-white/10 opacity-30"></div>
+            </div>
+          </div>
+        </section>
+
+        {/* Updated Contact Us Section to match screenshot exactly */}
+        <section className="px-4">
+          <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto flex flex-col lg:flex-row gap-12">
+            {/* Form Container */}
+            <div className="flex-1 bg-white p-12 md:p-16 rounded-[3.5rem] border border-slate-100 shadow-sm transition-all">
+              <h2 className="text-4xl font-black text-slate-900 tracking-tighter mb-3 leading-tight">
+                Get in Touch
+              </h2>
+              <p className="text-slate-400 font-medium mb-12 text-base leading-relaxed">
+                Have questions about listing your space or finding a spot? Our
+                team is here to help you 24/7.
+              </p>
+
+              <form onSubmit={handleContactSubmit} className="space-y-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  <div className="group">
+                    <label className="block text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 group-focus-within:text-yellow-500 transition-colors">
+                      NAME
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="Your name"
+                      className="w-full px-6 py-4 bg-slate-50/50 border border-slate-100 rounded-2xl outline-none focus:border-yellow-400 focus:bg-white transition-all font-bold text-slate-900 placeholder:text-slate-300"
+                    />
+                  </div>
+                  <div className="group">
+                    <label className="block text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 group-focus-within:text-yellow-500 transition-colors">
+                      EMAIL
+                    </label>
+                    <input
+                      required
+                      type="email"
+                      placeholder="name@example.com"
+                      className="w-full px-6 py-4 bg-slate-50/50 border border-slate-100 rounded-2xl outline-none focus:border-yellow-400 focus:bg-white transition-all font-bold text-slate-900 placeholder:text-slate-300"
+                    />
+                  </div>
+                </div>
+                <div className="group">
+                  <label className="block text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 group-focus-within:text-yellow-500 transition-colors">
+                    MESSAGE
+                  </label>
+                  <textarea
+                    required
+                    rows={4}
+                    placeholder="How can we help you?"
+                    className="w-full px-6 py-4 bg-slate-50/50 border border-slate-100 rounded-2xl outline-none focus:border-yellow-400 focus:bg-white transition-all font-bold text-slate-900 resize-none placeholder:text-slate-300"
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-6 bg-[#F5B800] hover:bg-[#D4A017] text-slate-900 font-black rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-xl shadow-yellow-400/20 uppercase tracking-[0.15em] text-xs"
+                >
+                  <Send size={16} fill="currentColor" /> SEND MESSAGE
+                </button>
+              </form>
+            </div>
+
+            {/* Contact Detail Cards Sidebar */}
+            <div className="w-full lg:w-[420px] space-y-6 flex flex-col">
+              {[
+                {
+                  icon: Mail,
+                  label: "SUPPORT EMAIL",
+                  value: "hello@parkinghut.com",
+                  iconColor: "text-blue-500",
+                },
+                {
+                  icon: Phone,
+                  label: "SUPPORT LINE",
+                  value: "+91 90000 12345",
+                  iconColor: "text-green-500",
+                },
+                {
+                  icon: MapPin,
+                  label: "CORPORATE OFFICE",
+                  value: "Tower 4, Grid Sector, Chennai TN",
+                  iconColor: "text-red-500",
+                },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="bg-white p-7 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-6 group hover:border-yellow-100 transition-all cursor-default"
+                >
+                  <div
+                    className={`w-14 h-14 flex items-center justify-center bg-slate-50 rounded-2xl ${item.iconColor} group-hover:bg-yellow-50 transition-colors`}
+                  >
+                    <item.icon size={24} strokeWidth={2.5} />
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.2em] mb-1.5 leading-none">
+                      {item.label}
+                    </p>
+                    <p className="text-base font-black text-slate-900 tracking-tight leading-none">
+                      {item.value}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       </div>
