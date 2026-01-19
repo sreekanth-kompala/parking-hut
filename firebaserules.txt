@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- Users collection ---
+    match /users/{userId} {
+      // Allow public read/list so phone uniqueness can be checked before signup
+      // and seekers can see provider details for spaces.
+      allow read, list: if true;
+      
+      // Only the authenticated user whose UID matches the document ID can create or update it.
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // --- Parking Spaces ---
+    match /spaces/{spaceId} {
+      // Allow anyone (including guests) to browse and search for spaces
+      allow read, list: if true;
+
+      allow create: if request.auth != null 
+                    && request.resource.data.providerId == request.auth.uid;
+
+      // Allow owner to update everything. 
+      // Allow authenticated Seekers to update ONLY slot-related fields during booking.
+      allow update: if request.auth != null && (
+        resource.data.providerId == request.auth.uid || 
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['carSlots', 'bikeSlots', 'totalSlots', 'isAvailable'])
+      );
+
+      allow delete: if request.auth != null 
+                            && resource.data.providerId == request.auth.uid;
+    }
+
+    // --- Bookings ---
+    match /bookings/{bookingId} {
+      // Allow reading if the user is the seeker OR the provider of the space
+      allow read: if request.auth != null && (
+        resource.data.seekerId == request.auth.uid || 
+        resource.data.providerId == request.auth.uid
+      );
+      
+      // Allow listing for the authenticated user
+      allow list: if request.auth != null;
+
+      allow create: if request.auth != null 
+                    && request.resource.data.seekerId == request.auth.uid;
+
+      allow update: if request.auth != null && (
+        resource.data.seekerId == request.auth.uid || 
+        resource.data.providerId == request.auth.uid
+      );
+      
+      allow delete: if false; // Audit trail: do not delete bookings
+    }
+  }
+}

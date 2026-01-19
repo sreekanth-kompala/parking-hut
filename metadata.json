@@ -1,0 +1,8 @@
+{
+  "name": "Parking Hut Website",
+  "description": "A peer-to-peer parking sharing platform for providers to list spaces and seekers to book them.",
+  "requestFramePermissions": [
+    "geolocation",
+    "camera"
+  ]
+}
