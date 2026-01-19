@@ -150,8 +150,8 @@ const HERO_IMAGE_URL =
   "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&q=80&w=1600";
 const WELCOME_BG_IMAGE =
   "https://images.unsplash.com/photo-1449156003053-c30670b96835?auto=format&fit=crop&q=80&w=1600";
-const ABOUT_IMAGE =
-  "https://images.unsplash.com/photo-1573348722427-f1d6819fdf98?auto=format&fit=crop&q=80&w=1600";
+const PRIORITY_SECTION_IMAGE =
+  "https://images.unsplash.com/photo-1470224114660-3f6686c562eb?auto=format&fit=crop&q=80&w=1200";
 
 const CHENNAI_TNAGAR_IMAGE =
   "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&q=80&w=800";
@@ -276,10 +276,8 @@ const SeekerHome: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-slate-900/80"></div>
         </div>
 
-        {/* Widened container but with scaled-down internal elements */}
         <div className="relative z-10 w-full max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] px-6 md:px-12 lg:px-20 flex flex-col items-center">
           <div className="animate-fade-in-up flex flex-col items-center">
-            {/* Scaled-down Typography */}
             <h1 className="text-4xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white tracking-tighter leading-tight mb-8 drop-shadow-xl">
               {user
                 ? `Hello, ${profile?.name?.split(" ")[0] || "Explorer"}! 👋`
@@ -333,7 +331,7 @@ const SeekerHome: React.FC = () => {
       </section>
 
       <div className="py-20 space-y-32">
-        {/* Featured Spots Section - Scaled down cards */}
+        {/* Featured Spots Section */}
         <section>
           <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left mb-16 gap-6 px-4">
             <div>
@@ -410,7 +408,77 @@ const SeekerHome: React.FC = () => {
           </div>
         </section>
 
-        {/* Mobile App Section - Compact padding and typography */}
+        {/* Safety & Convenience Priority Section - Re-added as requested */}
+        <section className="px-4">
+          <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto bg-white rounded-[4rem] border border-slate-100 overflow-hidden shadow-sm flex flex-col lg:flex-row items-stretch">
+            <div className="flex-1 p-12 md:p-16 lg:p-20 xl:p-24 flex flex-col justify-center">
+              <div className="inline-flex items-center px-4 py-1.5 bg-yellow-50 text-yellow-600 rounded-full text-[10px] font-black uppercase tracking-widest mb-8 self-start">
+                Premium Features
+              </div>
+              <h2 className="text-4xl md:text-5xl xl:text-6xl font-black text-slate-900 leading-[1.1] tracking-tighter mb-12">
+                Safety & Convenience is our Priority
+              </h2>
+
+              <div className="space-y-10">
+                <div className="flex gap-6 items-start group">
+                  <div className="p-4 bg-white rounded-2xl shadow-xl border border-slate-50 text-yellow-500 group-hover:bg-yellow-400 group-hover:text-white transition-all duration-300">
+                    <ShieldCheck size={24} strokeWidth={2.5} />
+                  </div>
+                  <div>
+                    <h4 className="font-black text-slate-900 text-lg mb-1 leading-tight">
+                      Verified Listings
+                    </h4>
+                    <p className="text-slate-400 text-sm font-medium leading-relaxed max-w-sm">
+                      Every space is physically verified by our safety team
+                      before listing.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-6 items-start group">
+                  <div className="p-4 bg-white rounded-2xl shadow-xl border border-slate-50 text-yellow-500 group-hover:bg-yellow-400 group-hover:text-white transition-all duration-300">
+                    <Award size={24} strokeWidth={2.5} />
+                  </div>
+                  <div>
+                    <h4 className="font-black text-slate-900 text-lg mb-1 leading-tight">
+                      Best Pricing
+                    </h4>
+                    <p className="text-slate-400 text-sm font-medium leading-relaxed max-w-sm">
+                      Peer-to-peer rates are 40% cheaper than traditional
+                      commercial garages.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-6 items-start group">
+                  <div className="p-4 bg-white rounded-2xl shadow-xl border border-slate-50 text-yellow-500 group-hover:bg-yellow-400 group-hover:text-white transition-all duration-300">
+                    <Heart size={24} strokeWidth={2.5} />
+                  </div>
+                  <div>
+                    <h4 className="font-black text-slate-900 text-lg mb-1 leading-tight">
+                      Community Driven
+                    </h4>
+                    <p className="text-slate-400 text-sm font-medium leading-relaxed max-w-sm">
+                      Built for neighbors, by neighbors. Rated 4.9/5 stars by
+                      10k+ users.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-1 min-h-[400px] relative overflow-hidden group">
+              <img
+                src={PRIORITY_SECTION_IMAGE}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"
+                alt="Safety Priority"
+              />
+              <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-slate-900/10"></div>
+            </div>
+          </div>
+        </section>
+
+        {/* Mobile App Section */}
         <section className="bg-slate-900 p-12 md:p-20 lg:p-24 rounded-[4rem] flex flex-col lg:flex-row items-center gap-24 overflow-hidden relative transition-all duration-500">
           <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-yellow-400 rounded-full blur-[200px] opacity-10"></div>
           <div className="flex-1 z-10 space-y-12 text-center lg:text-left flex flex-col items-center lg:items-start">
@@ -441,7 +509,7 @@ const SeekerHome: React.FC = () => {
           </div>
         </section>
 
-        {/* How It Works Section - Smaller icons and text */}
+        {/* How It Works Section */}
         <section className="bg-white p-16 md:p-24 rounded-[4rem] border border-slate-100 shadow-sm transition-all duration-500">
           <div className="text-center mb-24">
             <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter">
