@@ -1,4 +1,4 @@
-ParkingHut 🚗
+ParkingHut 🚗: 
 ParkingHut is a lightweight web application that helps users find, book, and list parking spaces easily. Space owners can earn by renting out unused parking spots, while drivers get quick and affordable parking.
 
 Features
