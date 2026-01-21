@@ -48,6 +48,7 @@ import {
   Home as HomeIcon,
   Star,
   Quote,
+  ChevronRight,
 } from "lucide-react";
 
 const FEATURED_IMAGES = [
@@ -60,7 +61,6 @@ const FEATURED_IMAGES = [
   "https://i.postimg.cc/tCJYrdS7/parking1.jpg",
 ];
 
-// Custom X (formerly Twitter) logo component
 const XIcon = ({ size = 20 }: { size?: number }) => (
   <svg
     width={size}
@@ -73,10 +73,8 @@ const XIcon = ({ size = 20 }: { size?: number }) => (
   </svg>
 );
 
-// High-fidelity CSS Mockup for the App Preview
 const AppPreviewMockup = () => (
   <div className="w-full h-full bg-[#f8fafc] flex flex-col p-5 text-left select-none overflow-hidden font-sans">
-    {/* Status Bar */}
     <div className="flex justify-between items-center mb-4 px-1">
       <div className="text-[10px] font-bold text-slate-900">9:41</div>
       <div className="flex gap-1.5">
@@ -85,7 +83,6 @@ const AppPreviewMockup = () => (
       </div>
     </div>
 
-    {/* Header */}
     <div className="mb-6">
       <h3 className="text-2xl font-black text-[#0f172a] leading-tight">
         Hello, John! 👋
@@ -95,7 +92,6 @@ const AppPreviewMockup = () => (
       </p>
     </div>
 
-    {/* Stats Cards */}
     <div className="grid grid-cols-2 gap-3 mb-6">
       <div className="bg-[#0f172a] p-5 rounded-[2.2rem] text-white shadow-xl">
         <Zap size={18} fill="#F5B800" className="text-yellow-400 mb-3" />
@@ -115,7 +111,6 @@ const AppPreviewMockup = () => (
       </div>
     </div>
 
-    {/* Popular Near You Section */}
     <div className="mb-6">
       <div className="flex justify-between items-center mb-4">
         <h4 className="text-[13px] font-black text-slate-900 uppercase tracking-tight">
@@ -147,7 +142,6 @@ const AppPreviewMockup = () => (
       </div>
     </div>
 
-    {/* Recent Activity Section */}
     <div className="mb-6">
       <h4 className="text-[13px] font-black text-slate-900 uppercase tracking-tight mb-4">
         Recent Activity
@@ -172,7 +166,6 @@ const AppPreviewMockup = () => (
       </div>
     </div>
 
-    {/* Bottom Navigation */}
     <div className="mt-auto -mx-5 -mb-5 bg-white border-t border-slate-100 px-8 py-5 flex justify-between items-center shadow-inner">
       <div className="flex flex-col items-center gap-1 text-yellow-600">
         <HomeIcon size={16} fill="currentColor" />
@@ -201,11 +194,6 @@ const WELCOME_BG_IMAGE =
 const PRIORITY_SECTION_IMAGE =
   "https://images.unsplash.com/photo-1470224114660-3f6686c562eb?auto=format&fit=crop&q=80&w=1200";
 
-// Updated to point to the local asset folder
-const CHENNAI_TNAGAR_IMAGE = "./assets/skyline.jpg";
-const CHENNAI_KORUKKUPET_IMAGE = "./assets/maruthi.jpg";
-const CHENNAI_BROADWAY_IMAGE = "./assets/broadway.jpg";
-
 const APP_STORE_BADGE =
   "https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg";
 const GOOGLE_PLAY_BADGE =
@@ -219,6 +207,9 @@ const SeekerHome: React.FC = () => {
   const { user, profile, setActiveTab, notify } = useAuth();
   const [popularSpaces, setPopularSpaces] = useState<ParkingSpace[]>([]);
   const [loading, setLoading] = useState(true);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
 
   useEffect(() => {
     const fetchSpaces = async () => {
@@ -243,7 +234,7 @@ const SeekerHome: React.FC = () => {
               description:
                 "Secure multi-level parking in the heart of T Nagar commercial hub.",
               address: "Ranganathan Street, T Nagar",
-              imageUrl: CHENNAI_TNAGAR_IMAGE,
+              imageUrl: FEATURED_IMAGES[0],
               pricing: {
                 car: { hourly: 10, daily: 50, monthly: 1000 },
                 bike: { hourly: 5, daily: 20, monthly: 400 },
@@ -257,12 +248,30 @@ const SeekerHome: React.FC = () => {
               providerId: "system",
             },
             {
+              id: "chennai-central",
+              title: "Chennai Central Parking Lot",
+              description: "Massive open parking area next to the station.",
+              address: "Kannappar Thidal, Park Town, Chennai",
+              imageUrl: FEATURED_IMAGES[1],
+              pricing: {
+                car: { hourly: 20, daily: 80, monthly: 1800 },
+                bike: { hourly: 10, daily: 40, monthly: 800 },
+                suv: { hourly: 30, daily: 120, monthly: 2500 },
+              },
+              isAvailable: true,
+              totalSlots: 450,
+              carSlots: 150,
+              bikeSlots: 300,
+              amenities: ["CCTV", "Security Guard"],
+              providerId: "system",
+            },
+            {
               id: "maruthi-korukkupet",
               title: "Maruthi Garage",
               description:
                 "Safe private garage with round-the-clock accessibility in Korukkupet.",
               address: "RK Nagar 2nd Street, Korukkupet",
-              imageUrl: CHENNAI_KORUKKUPET_IMAGE,
+              imageUrl: FEATURED_IMAGES[2],
               pricing: {
                 car: { hourly: 10, daily: 50, monthly: 1000 },
                 bike: { hourly: 5, daily: 20, monthly: 400 },
@@ -273,25 +282,6 @@ const SeekerHome: React.FC = () => {
               carSlots: 5,
               bikeSlots: 10,
               amenities: ["Power Backup"],
-              providerId: "system",
-            },
-            {
-              id: "broadway-georgetown",
-              title: "Broadway",
-              description:
-                "Convenient parking spot in the George Town area, ideal for daily business visits.",
-              address: "Broadway Rd, Asirvada Puram, George Town",
-              imageUrl: CHENNAI_BROADWAY_IMAGE,
-              pricing: {
-                car: { hourly: 10, daily: 50, monthly: 1000 },
-                bike: { hourly: 5, daily: 20, monthly: 400 },
-                suv: { hourly: 15, daily: 70, monthly: 1500 },
-              },
-              isAvailable: true,
-              totalSlots: 30,
-              carSlots: 15,
-              bikeSlots: 15,
-              amenities: ["CCTV", "Gated Access"],
               providerId: "system",
             },
           ];
@@ -309,6 +299,24 @@ const SeekerHome: React.FC = () => {
     fetchSpaces();
   }, []);
 
+  const scrollNext = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 400, behavior: "smooth" });
+    }
+  };
+
+  const scrollPrev = () => {
+    scrollRef.current?.scrollBy({ left: -400, behavior: "smooth" });
+  };
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 5);
+  };
+
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     notify("Thank you! Our support team will contact you shortly.", "success");
@@ -317,7 +325,6 @@ const SeekerHome: React.FC = () => {
 
   return (
     <div className="w-full animate-fade-in-up">
-      {/* Cinematic Ultra-Wide Hero Section */}
       <section className="relative overflow-hidden min-h-[70vh] flex flex-col justify-center items-center py-16 rounded-[3rem] sm:rounded-[4rem] mt-4 md:mt-6 text-center transition-all duration-700">
         <div className="absolute inset-0 z-0">
           <img
@@ -383,8 +390,7 @@ const SeekerHome: React.FC = () => {
       </section>
 
       <div className="py-20 space-y-32">
-        {/* Featured Spots Section */}
-        <section>
+        <section className="relative">
           <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left mb-16 gap-6 px-4">
             <div>
               <h2 className="text-3xl md:text-5xl xl:text-6xl font-black text-slate-900 uppercase tracking-tighter leading-none">
@@ -406,58 +412,91 @@ const SeekerHome: React.FC = () => {
             </button>
           </div>
 
-          <div className="flex gap-10 overflow-x-auto pb-12 scrollbar-hide px-4 -mx-4 transition-all">
-            {loading ? (
-              [1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="min-w-[340px] xl:min-w-[440px] 2xl:min-w-[520px] h-[500px] bg-white border border-slate-100 rounded-[3rem] animate-pulse"
-                />
-              ))
-            ) : popularSpaces.length > 0 ? (
-              popularSpaces.map((space, index) => (
-                <div
-                  key={space.id}
-                  className="min-w-[340px] xl:min-w-[440px] 2xl:min-w-[520px] bg-white rounded-[3rem] border border-slate-100 shadow-lg overflow-hidden group hover:border-yellow-300 transition-all cursor-pointer flex flex-col"
-                >
-                  <div className="h-56 xl:h-64 bg-slate-100 relative overflow-hidden m-4 rounded-[2.2rem]">
-                    <img
-                      src={FEATURED_IMAGES[index % FEATURED_IMAGES.length]}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      alt={space.title}
-                    />
-                    <div className="absolute bottom-6 left-6 bg-white px-6 py-3 rounded-2xl text-xs font-black text-slate-900 shadow-xl border border-slate-100">
-                      ₹{space.pricing?.car?.hourly || 0}/hr
-                    </div>
-                  </div>
-
-                  <div className="p-8 pb-12 text-center flex-1 flex flex-col justify-center">
-                    <h4 className="font-black text-2xl xl:text-3xl text-slate-900 mb-3 tracking-tight leading-tight">
-                      {space.title}
-                    </h4>
-                    <div className="flex items-center justify-center gap-2 text-slate-400 font-bold text-sm xl:text-base">
-                      <MapPin
-                        size={18}
-                        className="text-yellow-500 flex-shrink-0"
+          <div className="relative group">
+            <div
+              ref={scrollRef}
+              onScroll={handleScroll}
+              className="flex gap-10 overflow-x-auto pb-12 scrollbar-hide px-4 -mx-4 transition-all"
+            >
+              {loading ? (
+                [1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="min-w-[340px] xl:min-w-[440px] 2xl:min-w-[520px] h-[500px] bg-white border border-slate-100 rounded-[3rem] animate-pulse"
+                  />
+                ))
+              ) : popularSpaces.length > 0 ? (
+                popularSpaces.map((space, index) => (
+                  <div
+                    key={space.id}
+                    className="min-w-[340px] xl:min-w-[440px] 2xl:min-w-[520px] bg-white rounded-[3rem] border border-slate-100 shadow-lg overflow-hidden group hover:border-yellow-300 transition-all cursor-pointer flex flex-col"
+                  >
+                    <div className="h-56 xl:h-64 bg-slate-100 relative overflow-hidden m-4 rounded-[2.2rem]">
+                      <img
+                        src={FEATURED_IMAGES[index % FEATURED_IMAGES.length]}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        alt={space.title}
                       />
-                      <span className="truncate max-w-[280px] xl:max-w-[380px]">
-                        {space.address}
-                      </span>
+                      <div className="absolute bottom-6 left-6 bg-white px-6 py-3 rounded-2xl text-xs font-black text-slate-900 shadow-xl border border-slate-100">
+                        ₹{space.pricing?.car?.hourly || 0}/hr
+                      </div>
+                    </div>
+
+                    <div className="p-8 pb-12 text-center flex-1 flex flex-col justify-center">
+                      <h4 className="font-black text-2xl xl:text-3xl text-slate-900 mb-3 tracking-tight leading-tight">
+                        {space.title}
+                      </h4>
+                      <div className="flex items-center justify-center gap-2 text-slate-400 font-bold text-sm xl:text-base">
+                        <MapPin
+                          size={18}
+                          className="text-yellow-500 flex-shrink-0"
+                        />
+                        <span className="truncate max-w-[280px] xl:max-w-[380px]">
+                          {space.address}
+                        </span>
+                      </div>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="w-full p-24 bg-white border-2 border-dashed border-slate-100 rounded-[4rem] text-center">
+                  <p className="text-slate-400 text-2xl font-bold">
+                    No spots discovered yet.
+                  </p>
                 </div>
-              ))
-            ) : (
-              <div className="w-full p-24 bg-white border-2 border-dashed border-slate-100 rounded-[4rem] text-center">
-                <p className="text-slate-400 text-2xl font-bold">
-                  No spots discovered yet.
-                </p>
-              </div>
+              )}
+            </div>
+
+            {/* Navigation Button exactly where marked */}
+
+            {canScrollLeft && (
+              <button
+                onClick={scrollPrev}
+                className="absolute top-1/2 left-4 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md text-slate-900 rounded-xl flex items-center justify-center border border-white/30 hover:bg-yellow-400/20 hover:border-yellow-400 hover:text-yellow-600 shadow-lg hover:scale-110 active:scale-95 transition-all z-20 group"
+              >
+                <ChevronLeft
+                  size={32}
+                  strokeWidth={3}
+                  className="group-hover:-translate-x-1 transition-transform"
+                />
+              </button>
+            )}
+            {canScrollRight && (
+              <button
+                onClick={scrollNext}
+                className="absolute top-1/2 right-4 -translate-y-1/2 w-16 h-16 bg-white/10 backdrop-blur-md text-slate-900 rounded-xl flex items-center justify-center border border-white/30 hover:bg-yellow-400/20 hover:border-yellow-400 hover:text-yellow-600 shadow-lg hover:scale-110 active:scale-95 transition-all z-20 group"
+                aria-label="Next featured spot"
+              >
+                <ChevronRight
+                  size={32}
+                  strokeWidth={3}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </button>
             )}
           </div>
         </section>
 
-        {/* How It Works Section */}
         <section className="bg-white p-16 md:p-24 rounded-[4rem] border border-slate-100 shadow-sm transition-all duration-500">
           <div className="text-center mb-24">
             <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter">
@@ -500,7 +539,6 @@ const SeekerHome: React.FC = () => {
           </div>
         </section>
 
-        {/* Safety & Convenience Priority Section */}
         <section className="px-4">
           <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto bg-white rounded-[4rem] border border-slate-100 overflow-hidden shadow-sm flex flex-col lg:flex-row items-stretch">
             <div className="flex-1 p-12 md:p-16 lg:p-20 xl:p-24 flex flex-col justify-center">
@@ -570,7 +608,6 @@ const SeekerHome: React.FC = () => {
           </div>
         </section>
 
-        {/* Partner with Us Section */}
         <section className="px-4">
           <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto bg-[#0f172a] rounded-[4rem] p-16 md:p-24 text-center flex flex-col items-center justify-center relative overflow-hidden group shadow-2xl shadow-slate-900/40">
             <div className="absolute inset-0 bg-yellow-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
@@ -592,7 +629,6 @@ const SeekerHome: React.FC = () => {
           </div>
         </section>
 
-        {/* Community Impact & Testimonials Section */}
         <section className="space-y-32">
           <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-12 bg-white rounded-[3rem] border border-slate-100 shadow-sm items-center divide-y md:divide-y-0 md:divide-x divide-slate-50">
@@ -720,7 +756,6 @@ const SeekerHome: React.FC = () => {
           </div>
         </section>
 
-        {/* Mobile App Section */}
         <section className="bg-[#0f172a] p-12 md:p-20 lg:p-24 rounded-[4rem] flex flex-col lg:flex-row items-center gap-16 overflow-hidden relative transition-all duration-500">
           <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-yellow-400 rounded-full blur-[200px] opacity-10"></div>
           <div className="flex-1 z-10 space-y-12 text-center lg:text-left flex flex-col items-center lg:items-start">
@@ -757,10 +792,8 @@ const SeekerHome: React.FC = () => {
           </div>
         </section>
 
-        {/* Updated Contact Us Section to match screenshot exactly */}
         <section className="px-4">
           <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto flex flex-col lg:flex-row gap-12">
-            {/* Form Container */}
             <div className="flex-1 bg-white p-12 md:p-16 rounded-[3.5rem] border border-slate-100 shadow-sm transition-all">
               <h2 className="text-4xl font-black text-slate-900 tracking-tighter mb-3 leading-tight">
                 Get in Touch
@@ -773,7 +806,7 @@ const SeekerHome: React.FC = () => {
               <form onSubmit={handleContactSubmit} className="space-y-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                   <div className="group">
-                    <label className="block text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 group-focus-within:text-yellow-500 transition-colors">
+                    <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3 group-focus-within:text-yellow-500 transition-colors">
                       NAME
                     </label>
                     <input
@@ -784,7 +817,7 @@ const SeekerHome: React.FC = () => {
                     />
                   </div>
                   <div className="group">
-                    <label className="block text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 group-focus-within:text-yellow-500 transition-colors">
+                    <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3 group-focus-within:text-yellow-500 transition-colors">
                       EMAIL
                     </label>
                     <input
@@ -796,7 +829,7 @@ const SeekerHome: React.FC = () => {
                   </div>
                 </div>
                 <div className="group">
-                  <label className="block text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 group-focus-within:text-yellow-500 transition-colors">
+                  <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3 group-focus-within:text-yellow-500 transition-colors">
                     MESSAGE
                   </label>
                   <textarea
@@ -815,7 +848,6 @@ const SeekerHome: React.FC = () => {
               </form>
             </div>
 
-            {/* Contact Detail Cards Sidebar */}
             <div className="w-full lg:w-[420px] space-y-6 flex flex-col">
               {[
                 {
