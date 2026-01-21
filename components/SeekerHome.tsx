@@ -52,8 +52,12 @@ import {
 
 const FEATURED_IMAGES = [
   "https://i.postimg.cc/2S3zSP8r/Skyline-Parking-Garage.jpg",
+  "https://i.postimg.cc/Yq0hXNnC/parking2.webp",
   "https://i.postimg.cc/Jzt1z94R/Maruthi-Garage.jpg",
+  "https://i.postimg.cc/9F0rxP8R/parking4.jpg",
+  "https://i.postimg.cc/CL5zvCPz/parking3.webp",
   "https://i.postimg.cc/BntqndZr/Broadway-Parking-Garage.jpg",
+  "https://i.postimg.cc/tCJYrdS7/parking1.jpg",
 ];
 
 // Custom X (formerly Twitter) logo component
