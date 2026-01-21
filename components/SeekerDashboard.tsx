@@ -48,11 +48,23 @@ const getAmenityIcon = (name: string) => {
   }
 };
 
-const FEATURED_IMAGES = [
+const IMAGES = [
   "https://i.postimg.cc/2S3zSP8r/Skyline-Parking-Garage.jpg",
+  "https://i.postimg.cc/Yq0hXNnC/parking2.webp",
   "https://i.postimg.cc/Jzt1z94R/Maruthi-Garage.jpg",
+  "https://i.postimg.cc/9F0rxP8R/parking4.jpg",
+  "https://i.postimg.cc/CL5zvCPz/parking3.webp",
   "https://i.postimg.cc/BntqndZr/Broadway-Parking-Garage.jpg",
+  "https://i.postimg.cc/tCJYrdS7/parking1.jpg",
 ];
+
+const getSpaceImage = (spaceId: string) => {
+  let hash = 0;
+  for (let i = 0; i < spaceId.length; i++) {
+    hash = spaceId.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return IMAGES[Math.abs(hash) % IMAGES.length];
+};
 
 const AmenityTag: React.FC<{ name: string }> = ({ name }) => {
   const [showName, setShowName] = useState(false);
@@ -337,13 +349,12 @@ const SeekerDashboard: React.FC = () => {
           {filteredSpaces.map((space, index) => (
             <div
               key={space.id}
-              className="bg-white rounded-[4rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all cursor-pointer overflow-hidden group"
-              onClick={() => setSelectedSpace(space)}
+              className="min-w-[340px] xl:min-w-[440px] 2xl:min-w-[520px] bg-white rounded-[3rem] border border-slate-100 shadow-lg overflow-hidden group hover:border-yellow-300 transition-all cursor-pointer flex flex-col"
             >
-              <div className="h-64 bg-slate-100 relative overflow-hidden">
+              <div className="h-56 xl:h-64 bg-slate-100 relative overflow-hidden m-4 rounded-[2.2rem]">
                 <img
-                  src={FEATURED_IMAGES[index % FEATURED_IMAGES.length]}
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  src={IMAGES[index % IMAGES.length]}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   alt={space.title}
                 />
                 <div className="absolute top-6 right-6 flex flex-col gap-3 items-end">
