@@ -142,30 +142,6 @@ const AppPreviewMockup = () => (
       </div>
     </div>
 
-    <div className="mb-6">
-      <h4 className="text-[13px] font-black text-slate-900 uppercase tracking-tight mb-4">
-        Recent Activity
-      </h4>
-      <div className="bg-white p-4 rounded-[1.8rem] border border-slate-100 shadow-sm flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400">
-            <Clock size={18} />
-          </div>
-          <div>
-            <p className="text-[11px] font-black text-slate-900">
-              Maruthi Garage
-            </p>
-            <p className="text-[9px] text-slate-400 font-bold">
-              1/18/2026 • ₹1010
-            </p>
-          </div>
-        </div>
-        <span className="px-2 py-0.5 bg-green-50 text-green-600 rounded-lg text-[8px] font-black uppercase border border-green-100">
-          CONFIRMED
-        </span>
-      </div>
-    </div>
-
     <div className="mt-auto -mx-5 -mb-5 bg-white border-t border-slate-100 px-8 py-5 flex justify-between items-center shadow-inner">
       <div className="flex flex-col items-center gap-1 text-yellow-600">
         <HomeIcon size={16} fill="currentColor" />
@@ -203,6 +179,43 @@ const APP_STORE_STICKER =
 const GOOGLE_PLAY_STICKER =
   "https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg";
 
+// Utility component for reveal animations
+const ScrollReveal: React.FC<{
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}> = ({ children, className = "", delay = 0 }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 },
+    );
+
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      style={{ transitionDelay: `${delay}ms` }}
+      className={`transition-all duration-1000 transform ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+      } ${className}`}
+    >
+      {children}
+    </div>
+  );
+};
+
 const SeekerHome: React.FC = () => {
   const { user, profile, setActiveTab, notify } = useAuth();
   const [popularSpaces, setPopularSpaces] = useState<ParkingSpace[]>([]);
@@ -210,6 +223,13 @@ const SeekerHome: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const [scrollPos, setScrollPos] = useState(0);
+
+  useEffect(() => {
+    const handleMainScroll = () => setScrollPos(window.scrollY);
+    window.addEventListener("scroll", handleMainScroll);
+    return () => window.removeEventListener("scroll", handleMainScroll);
+  }, []);
 
   useEffect(() => {
     const fetchSpaces = async () => {
@@ -324,12 +344,15 @@ const SeekerHome: React.FC = () => {
   };
 
   return (
-    <div className="w-full animate-fade-in-up">
+    <div className="w-full">
       <section className="relative overflow-hidden min-h-[70vh] flex flex-col justify-center items-center py-16 rounded-[3rem] sm:rounded-[4rem] mt-4 md:mt-6 text-center transition-all duration-700">
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 overflow-hidden">
           <img
             src={user ? WELCOME_BG_IMAGE : HERO_IMAGE_URL}
-            className="w-full h-full object-cover transform scale-105"
+            style={{
+              transform: `scale(${1.05 + scrollPos * 0.0001}) translateY(${scrollPos * 0.1}px)`,
+            }}
+            className="w-full h-full object-cover transition-transform duration-100 ease-out"
             alt="Hero Background"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-slate-900/80"></div>
@@ -390,7 +413,7 @@ const SeekerHome: React.FC = () => {
       </section>
 
       <div className="py-20 space-y-32">
-        <section className="relative">
+        <ScrollReveal className="relative">
           <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left mb-16 gap-6 px-4">
             <div>
               <h2 className="text-3xl md:text-5xl xl:text-6xl font-black text-slate-900 uppercase tracking-tighter leading-none">
@@ -467,8 +490,6 @@ const SeekerHome: React.FC = () => {
               )}
             </div>
 
-            {/* Navigation Button exactly where marked */}
-
             {canScrollLeft && (
               <button
                 onClick={scrollPrev}
@@ -495,9 +516,9 @@ const SeekerHome: React.FC = () => {
               </button>
             )}
           </div>
-        </section>
+        </ScrollReveal>
 
-        <section className="bg-white p-16 md:p-24 rounded-[4rem] border border-slate-100 shadow-sm transition-all duration-500">
+        <ScrollReveal className="bg-white p-16 md:p-24 rounded-[4rem] border border-slate-100 shadow-sm transition-all duration-500">
           <div className="text-center mb-24">
             <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter">
               Simple 1-2-3 Booking
@@ -524,7 +545,11 @@ const SeekerHome: React.FC = () => {
                 desc: "Navigate to your spot and park with confidence. No more circling!",
               },
             ].map((step, i) => (
-              <div key={i} className="text-center group">
+              <ScrollReveal
+                key={i}
+                delay={i * 200}
+                className="text-center group"
+              >
                 <div className="w-32 h-32 bg-slate-50 text-slate-900 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 group-hover:bg-yellow-400 group-hover:text-white transition-all duration-500 shadow-sm">
                   <step.icon size={48} strokeWidth={2.5} />
                 </div>
@@ -534,13 +559,13 @@ const SeekerHome: React.FC = () => {
                 <p className="text-slate-500 font-medium leading-relaxed text-lg">
                   {step.desc}
                 </p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
-        </section>
+        </ScrollReveal>
 
         <section className="px-4">
-          <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto bg-white rounded-[4rem] border border-slate-100 overflow-hidden shadow-sm flex flex-col lg:flex-row items-stretch">
+          <ScrollReveal className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto bg-white rounded-[4rem] border border-slate-100 overflow-hidden shadow-sm flex flex-col lg:flex-row items-stretch">
             <div className="flex-1 p-12 md:p-16 lg:p-20 xl:p-24 flex flex-col justify-center">
               <div className="inline-flex items-center px-4 py-1.5 bg-yellow-50 text-yellow-600 rounded-full text-[10px] font-black uppercase tracking-widest mb-8 self-start">
                 Premium Features
@@ -550,50 +575,41 @@ const SeekerHome: React.FC = () => {
               </h2>
 
               <div className="space-y-10">
-                <div className="flex gap-6 items-start group">
-                  <div className="p-4 bg-white rounded-2xl shadow-xl border border-slate-50 text-yellow-500 group-hover:bg-yellow-400 group-hover:text-white transition-all duration-300">
-                    <ShieldCheck size={24} strokeWidth={2.5} />
-                  </div>
-                  <div>
-                    <h4 className="font-black text-slate-900 text-lg mb-1 leading-tight">
-                      Verified Listings
-                    </h4>
-                    <p className="text-slate-400 text-sm font-medium leading-relaxed max-w-sm">
-                      Every space is physically verified by our safety team
-                      before listing.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-6 items-start group">
-                  <div className="p-4 bg-white rounded-2xl shadow-xl border border-slate-50 text-yellow-500 group-hover:bg-yellow-400 group-hover:text-white transition-all duration-300">
-                    <Award size={24} strokeWidth={2.5} />
-                  </div>
-                  <div>
-                    <h4 className="font-black text-slate-900 text-lg mb-1 leading-tight">
-                      Best Pricing
-                    </h4>
-                    <p className="text-slate-400 text-sm font-medium leading-relaxed max-w-sm">
-                      Peer-to-peer rates are 40% cheaper than traditional
-                      commercial garages.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-6 items-start group">
-                  <div className="p-4 bg-white rounded-2xl shadow-xl border border-slate-50 text-yellow-500 group-hover:bg-yellow-400 group-hover:text-white transition-all duration-300">
-                    <Heart size={24} strokeWidth={2.5} />
-                  </div>
-                  <div>
-                    <h4 className="font-black text-slate-900 text-lg mb-1 leading-tight">
-                      Community Driven
-                    </h4>
-                    <p className="text-slate-400 text-sm font-medium leading-relaxed max-w-sm">
-                      Built for neighbors, by neighbors. Rated 4.9/5 stars by
-                      10k+ users.
-                    </p>
-                  </div>
-                </div>
+                {[
+                  {
+                    icon: ShieldCheck,
+                    title: "Verified Listings",
+                    desc: "Every space is physically verified by our safety team before listing.",
+                  },
+                  {
+                    icon: Award,
+                    title: "Best Pricing",
+                    desc: "Peer-to-peer rates are 40% cheaper than traditional commercial garages.",
+                  },
+                  {
+                    icon: Heart,
+                    title: "Community Driven",
+                    desc: "Built for neighbors, by neighbors. Rated 4.9/5 stars by 10k+ users.",
+                  },
+                ].map((item, i) => (
+                  <ScrollReveal
+                    key={i}
+                    delay={i * 150}
+                    className="flex gap-6 items-start group"
+                  >
+                    <div className="p-4 bg-white rounded-2xl shadow-xl border border-slate-50 text-yellow-500 group-hover:bg-yellow-400 group-hover:text-white transition-all duration-300">
+                      <item.icon size={24} strokeWidth={2.5} />
+                    </div>
+                    <div>
+                      <h4 className="font-black text-slate-900 text-lg mb-1 leading-tight">
+                        {item.title}
+                      </h4>
+                      <p className="text-slate-400 text-sm font-medium leading-relaxed max-w-sm">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </ScrollReveal>
+                ))}
               </div>
             </div>
 
@@ -605,11 +621,11 @@ const SeekerHome: React.FC = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-slate-900/10"></div>
             </div>
-          </div>
+          </ScrollReveal>
         </section>
 
         <section className="px-4">
-          <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto bg-[#0f172a] rounded-[4rem] p-16 md:p-24 text-center flex flex-col items-center justify-center relative overflow-hidden group shadow-2xl shadow-slate-900/40">
+          <ScrollReveal className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto bg-[#0f172a] rounded-[4rem] p-16 md:p-24 text-center flex flex-col items-center justify-center relative overflow-hidden group shadow-2xl shadow-slate-900/40">
             <div className="absolute inset-0 bg-yellow-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
             <div className="relative z-10 space-y-8 max-w-2xl">
               <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-none">
@@ -626,12 +642,12 @@ const SeekerHome: React.FC = () => {
                 START LISTING
               </button>
             </div>
-          </div>
+          </ScrollReveal>
         </section>
 
         <section className="space-y-32">
           <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-12 bg-white rounded-[3rem] border border-slate-100 shadow-sm items-center divide-y md:divide-y-0 md:divide-x divide-slate-50">
+            <ScrollReveal className="grid grid-cols-1 md:grid-cols-3 gap-8 py-12 bg-white rounded-[3rem] border border-slate-100 shadow-sm items-center divide-y md:divide-y-0 md:divide-x divide-slate-50">
               <div className="px-12 py-6 text-center">
                 <p className="text-5xl lg:text-6xl font-black text-slate-900 tracking-tighter mb-2">
                   NA
@@ -656,11 +672,11 @@ const SeekerHome: React.FC = () => {
                   Provider Earnings
                 </p>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
 
           <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto px-4">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+            <ScrollReveal className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
               <div className="max-w-2xl">
                 <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter leading-none mb-6">
                   Voices from the Grid
@@ -697,7 +713,7 @@ const SeekerHome: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
               {[
@@ -723,8 +739,9 @@ const SeekerHome: React.FC = () => {
                   img: "https://i.postimg.cc/hP4N1Tmq/userrating3.png",
                 },
               ].map((t, i) => (
-                <div
+                <ScrollReveal
                   key={i}
+                  delay={i * 200}
                   className="bg-white p-12 rounded-[3.5rem] border border-slate-100 shadow-sm flex flex-col hover:border-yellow-400 transition-all group"
                 >
                   <div className="mb-10 text-yellow-100 group-hover:text-yellow-400 transition-colors">
@@ -750,50 +767,52 @@ const SeekerHome: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                </div>
+                </ScrollReveal>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="bg-[#0f172a] p-12 md:p-20 lg:p-24 rounded-[4rem] flex flex-col lg:flex-row items-center gap-16 overflow-hidden relative transition-all duration-500">
-          <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-yellow-400 rounded-full blur-[200px] opacity-10"></div>
-          <div className="flex-1 z-10 space-y-12 text-center lg:text-left flex flex-col items-center lg:items-start">
-            <div className="inline-flex items-center gap-4 px-6 py-2.5 bg-white/5 text-white/60 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-white/10">
-              <Smartphone size={16} className="text-yellow-400" /> COMING SOON
+        <section className="px-4">
+          <ScrollReveal className="bg-[#0f172a] p-12 md:p-20 lg:p-24 rounded-[4rem] flex flex-col lg:flex-row items-center gap-16 overflow-hidden relative transition-all duration-500">
+            <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-yellow-400 rounded-full blur-[200px] opacity-10"></div>
+            <div className="flex-1 z-10 space-y-12 text-center lg:text-left flex flex-col items-center lg:items-start">
+              <div className="inline-flex items-center gap-4 px-6 py-2.5 bg-white/5 text-white/60 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-white/10">
+                <Smartphone size={16} className="text-yellow-400" /> COMING SOON
+              </div>
+              <h2 className="text-6xl md:text-8xl xl:text-9xl font-black text-white leading-[0.9] tracking-tighter max-w-xl">
+                Parking Hut in your Pocket
+              </h2>
+              <p className="text-slate-400 text-xl md:text-2xl leading-relaxed font-medium max-w-xl">
+                Get real-time directions to your spot, instant push
+                notifications for booking updates, and quick one-tap extensions
+                right from our mobile app.
+              </p>
+              <div className="flex flex-wrap justify-center lg:justify-start gap-6 pt-4">
+                <img
+                  src={APP_STORE_BADGE}
+                  alt="App Store"
+                  className="h-[65px] hover:scale-105 transition-transform cursor-pointer"
+                />
+                <img
+                  src={GOOGLE_PLAY_BADGE}
+                  alt="Play Store"
+                  className="h-[65px] hover:scale-105 transition-transform cursor-pointer"
+                />
+              </div>
             </div>
-            <h2 className="text-6xl md:text-8xl xl:text-9xl font-black text-white leading-[0.9] tracking-tighter max-w-xl">
-              Parking Hut in your Pocket
-            </h2>
-            <p className="text-slate-400 text-xl md:text-2xl leading-relaxed font-medium max-w-xl">
-              Get real-time directions to your spot, instant push notifications
-              for booking updates, and quick one-tap extensions right from our
-              mobile app.
-            </p>
-            <div className="flex flex-wrap justify-center lg:justify-start gap-6 pt-4">
-              <img
-                src={APP_STORE_BADGE}
-                alt="App Store"
-                className="h-[65px] hover:scale-105 transition-transform cursor-pointer"
-              />
-              <img
-                src={GOOGLE_PLAY_BADGE}
-                alt="Play Store"
-                className="h-[65px] hover:scale-105 transition-transform cursor-pointer"
-              />
-            </div>
-          </div>
 
-          <div className="flex-1 w-full flex justify-center lg:justify-end z-10 lg:pr-10">
-            <div className="relative w-[340px] h-[680px] xl:w-[380px] xl:h-[760px] bg-[#0f172a] rounded-[4.5rem] border-[12px] border-[#1e293b] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden group hover:scale-[1.02] transition-all duration-700">
-              <AppPreviewMockup />
-              <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-white/5 via-transparent to-white/10 opacity-30"></div>
+            <div className="flex-1 w-full flex justify-center lg:justify-end z-10 lg:pr-10">
+              <div className="relative w-[340px] h-[680px] xl:w-[380px] xl:h-[760px] bg-[#0f172a] rounded-[4.5rem] border-[12px] border-[#1e293b] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden group hover:scale-[1.02] transition-all duration-700">
+                <AppPreviewMockup />
+                <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-white/5 via-transparent to-white/10 opacity-30"></div>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </section>
 
         <section className="px-4">
-          <div className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto flex flex-col lg:flex-row gap-12">
+          <ScrollReveal className="max-w-[1500px] xl:max-w-[1800px] 2xl:max-w-[2200px] mx-auto flex flex-col lg:flex-row gap-12">
             <div className="flex-1 bg-white p-12 md:p-16 rounded-[3.5rem] border border-slate-100 shadow-sm transition-all">
               <h2 className="text-4xl font-black text-slate-900 tracking-tighter mb-3 leading-tight">
                 Get in Touch
@@ -869,8 +888,9 @@ const SeekerHome: React.FC = () => {
                   iconColor: "text-red-500",
                 },
               ].map((item, i) => (
-                <div
+                <ScrollReveal
                   key={i}
+                  delay={i * 100}
                   className="bg-white p-7 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-6 group hover:border-yellow-100 transition-all cursor-default"
                 >
                   <div
@@ -886,10 +906,10 @@ const SeekerHome: React.FC = () => {
                       {item.value}
                     </p>
                   </div>
-                </div>
+                </ScrollReveal>
               ))}
             </div>
-          </div>
+          </ScrollReveal>
         </section>
       </div>
 

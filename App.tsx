@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { onAuthStateChanged, type User } from "firebase/auth";
+// Fix: Standardize Firebase Auth imports and resolve module export errors
+import { onAuthStateChanged } from "firebase/auth";
+import type { User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "./firebase";
 import { UserProfile, TabID } from "./types";
@@ -41,7 +43,16 @@ const App: React.FC = () => {
   const [showAuthOverlay, setShowAuthOverlay] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "signup">("login");
   const [isNavPanelOpen, setIsNavPanelOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const isInitialized = useRef(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const dismissNotify = useCallback((id: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
@@ -171,15 +182,33 @@ const App: React.FC = () => {
     >
       <div className="min-h-screen bg-slate-50 pt-[calc(5rem+env(safe-area-inset-top))] md:pt-24 lg:pt-28 overflow-x-hidden">
         {/* Navbar - Dynamic width scaling for header */}
-        <header className="fixed top-0 left-0 right-0 z-[100] bg-white border-b border-slate-100 w-full transition-all px-4 md:px-6 lg:px-10 h-20 md:h-24 lg:h-28 flex items-center justify-between shadow-sm">
+        <header
+          className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 px-4 md:px-6 lg:px-10 flex items-center justify-between ${
+            scrolled
+              ? "h-16 md:h-20 lg:h-24 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-lg"
+              : "h-20 md:h-24 lg:h-28 bg-white border-b border-slate-100 shadow-sm"
+          }`}
+        >
           <div
             className="flex items-center gap-3 md:gap-4 cursor-pointer group"
             onClick={() => handleTabChange("home")}
           >
-            <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 bg-yellow-400 rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center font-black text-slate-900 text-sm sm:text-lg md:text-xl lg:text-2xl shadow-lg shadow-yellow-400/20 group-hover:scale-105 transition-transform">
+            <div
+              className={`transition-all duration-500 bg-yellow-400 rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center font-black text-slate-900 shadow-lg shadow-yellow-400/20 group-hover:scale-105 ${
+                scrolled
+                  ? "w-8 h-8 md:w-10 md:h-10 text-sm md:text-xl"
+                  : "w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-12 lg:h-12 text-sm sm:text-lg md:text-xl lg:text-2xl"
+              }`}
+            >
               P
             </div>
-            <span className="text-xl md:text-2xl lg:text-3xl font-black text-slate-900 tracking-tighter">
+            <span
+              className={`font-black text-slate-900 tracking-tighter transition-all duration-500 ${
+                scrolled
+                  ? "text-lg md:text-xl lg:text-2xl"
+                  : "text-xl md:text-2xl lg:text-3xl"
+              }`}
+            >
               Parking Hut
             </span>
           </div>
