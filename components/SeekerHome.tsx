@@ -377,7 +377,7 @@ const SeekerHome: React.FC = () => {
               {!user && (
                 <button
                   onClick={() => setActiveTab("spaces")}
-                  className="inline-flex items-center gap-4 bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-12 py-6 rounded-2xl font-black text-lg transition-all group shadow-2xl shadow-yellow-400/40 active:scale-[0.98]"
+                  className="inline-flex items-center gap-4 bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-12 py-6 rounded-2xl font-black text-lg transition-all group shadow-2xl shadow-yellow-400/20 active:scale-[0.98]"
                 >
                   EXPLORE NOW{" "}
                   <ArrowRight
@@ -439,7 +439,7 @@ const SeekerHome: React.FC = () => {
             </button>
           </div>
 
-          <div className="relative group">
+          <div className="relative">
             <div
               ref={scrollRef}
               onScroll={handleScroll}
