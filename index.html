@@ -9,6 +9,10 @@
 
     <title>Parking Hut</title>
 
+    <!-- Preconnect to Image CDNs -->
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="preconnect" href="https://i.postimg.cc" />
+
     <!-- SEO -->
     <meta
       name="description"
@@ -96,6 +100,17 @@
       * {
         -ms-overflow-style: none;
         scrollbar-width: none;
+      }
+
+      /* Smooth image transitions */
+      img {
+        transition: opacity 0.5s ease-in-out;
+      }
+      img:not([src]) {
+        opacity: 0;
+      }
+      img[src] {
+        opacity: 1;
       }
     </style>
 

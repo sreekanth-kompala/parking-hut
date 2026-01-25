@@ -126,6 +126,7 @@ const AppPreviewMockup = () => (
             src="https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&q=80&w=400"
             className="w-full h-full object-cover grayscale opacity-60"
             alt=""
+            loading="lazy"
           />
           <div className="absolute bottom-3 left-3 bg-white px-2.5 py-1 rounded-lg text-[9px] font-black text-slate-900 shadow-sm">
             ₹10/hr
@@ -164,9 +165,9 @@ const AppPreviewMockup = () => (
 );
 
 const HERO_IMAGE_URL =
-  "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&q=80&w=1600";
+  "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?auto=format&fit=crop&q=85&w=1920";
 const WELCOME_BG_IMAGE =
-  "https://images.unsplash.com/photo-1449156003053-c30670b96835?auto=format&fit=crop&q=80&w=1600";
+  "https://images.unsplash.com/photo-1449156003053-c30670b96835?auto=format&fit=crop&q=85&w=1920";
 const PRIORITY_SECTION_IMAGE =
   "https://images.unsplash.com/photo-1470224114660-3f6686c562eb?auto=format&fit=crop&q=80&w=1200";
 
@@ -227,7 +228,7 @@ const SeekerHome: React.FC = () => {
 
   useEffect(() => {
     const handleMainScroll = () => setScrollPos(window.scrollY);
-    window.addEventListener("scroll", handleMainScroll);
+    window.addEventListener("scroll", handleMainScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleMainScroll);
   }, []);
 
@@ -346,7 +347,7 @@ const SeekerHome: React.FC = () => {
   return (
     <div className="w-full">
       <section className="relative overflow-hidden min-h-[70vh] flex flex-col justify-center items-center py-16 rounded-[3rem] sm:rounded-[4rem] mt-4 md:mt-6 text-center transition-all duration-700">
-        <div className="absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute inset-0 z-0 overflow-hidden bg-slate-200">
           <img
             src={user ? WELCOME_BG_IMAGE : HERO_IMAGE_URL}
             style={{
@@ -354,6 +355,7 @@ const SeekerHome: React.FC = () => {
             }}
             className="w-full h-full object-cover transition-transform duration-100 ease-out"
             alt="Hero Background"
+            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-slate-900/80"></div>
         </div>
@@ -391,11 +393,13 @@ const SeekerHome: React.FC = () => {
                     src={APP_STORE_STICKER}
                     alt="App Store"
                     className="h-10 w-10 object-contain"
+                    loading="lazy"
                   />
                   <img
                     src={GOOGLE_PLAY_STICKER}
                     alt="Google Play"
                     className="h-10 w-10 object-contain"
+                    loading="lazy"
                   />
                 </div>
                 <div className="text-left">
@@ -454,11 +458,12 @@ const SeekerHome: React.FC = () => {
                     key={space.id}
                     className="min-w-[340px] xl:min-w-[440px] 2xl:min-w-[520px] bg-white rounded-[3rem] border border-slate-100 shadow-lg overflow-hidden group hover:border-yellow-300 transition-all cursor-pointer flex flex-col"
                   >
-                    <div className="h-56 xl:h-64 bg-slate-100 relative overflow-hidden m-4 rounded-[2.2rem]">
+                    <div className="h-56 xl:h-64 bg-slate-200 relative overflow-hidden m-4 rounded-[2.2rem]">
                       <img
                         src={FEATURED_IMAGES[index % FEATURED_IMAGES.length]}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                         alt={space.title}
+                        loading="lazy"
                       />
                       <div className="absolute bottom-6 left-6 bg-white px-6 py-3 rounded-2xl text-xs font-black text-slate-900 shadow-xl border border-slate-100">
                         ₹{space.pricing?.car?.hourly || 0}/hr
@@ -613,11 +618,12 @@ const SeekerHome: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex-1 min-h-[400px] relative overflow-hidden group">
+            <div className="flex-1 min-h-[400px] relative overflow-hidden group bg-slate-200">
               <img
                 src={PRIORITY_SECTION_IMAGE}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"
                 alt="Safety Priority"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-slate-900/10"></div>
             </div>
@@ -696,6 +702,7 @@ const SeekerHome: React.FC = () => {
                       <img
                         src={`https://i.pravatar.cc/150?u=${i + 10}`}
                         alt="User"
+                        loading="lazy"
                       />
                     </div>
                   ))}
@@ -751,11 +758,12 @@ const SeekerHome: React.FC = () => {
                     "{t.text}"
                   </p>
                   <div className="flex items-center gap-6 pt-10 border-t border-slate-50">
-                    <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-50 flex-shrink-0">
+                    <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 flex-shrink-0">
                       <img
                         src={t.img}
                         className="w-full h-full object-cover"
                         alt={t.name}
+                        loading="lazy"
                       />
                     </div>
                     <div>
@@ -783,21 +791,18 @@ const SeekerHome: React.FC = () => {
               <h2 className="text-6xl md:text-8xl xl:text-9xl font-black text-white leading-[0.9] tracking-tighter max-w-xl">
                 Parking Hut in your Pocket
               </h2>
-              <p className="text-slate-400 text-xl md:text-2xl leading-relaxed font-medium max-w-xl">
-                Get real-time directions to your spot, instant push
-                notifications for booking updates, and quick one-tap extensions
-                right from our mobile app.
-              </p>
               <div className="flex flex-wrap justify-center lg:justify-start gap-6 pt-4">
                 <img
                   src={APP_STORE_BADGE}
                   alt="App Store"
                   className="h-[65px] hover:scale-105 transition-transform cursor-pointer"
+                  loading="lazy"
                 />
                 <img
                   src={GOOGLE_PLAY_BADGE}
                   alt="Play Store"
                   className="h-[65px] hover:scale-105 transition-transform cursor-pointer"
+                  loading="lazy"
                 />
               </div>
             </div>

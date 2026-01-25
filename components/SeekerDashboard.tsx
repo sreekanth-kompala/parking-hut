@@ -349,13 +349,15 @@ const SeekerDashboard: React.FC = () => {
           {filteredSpaces.map((space, index) => (
             <div
               key={space.id}
+              onClick={() => setSelectedSpace(space)}
               className="min-w-[340px] xl:min-w-[440px] 2xl:min-w-[520px] bg-white rounded-[3rem] border border-slate-100 shadow-lg overflow-hidden group hover:border-yellow-300 transition-all cursor-pointer flex flex-col"
             >
-              <div className="h-56 xl:h-64 bg-slate-100 relative overflow-hidden m-4 rounded-[2.2rem]">
+              <div className="h-56 xl:h-64 bg-slate-200 relative overflow-hidden m-4 rounded-[2.2rem]">
                 <img
                   src={IMAGES[index % IMAGES.length]}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   alt={space.title}
+                  loading="lazy"
                 />
                 <div className="absolute top-6 right-6 flex flex-col gap-3 items-end">
                   <div
