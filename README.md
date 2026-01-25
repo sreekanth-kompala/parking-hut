@@ -1,9 +1,11 @@
 <img width="269" height="269" alt="favicon1" src="https://github.com/user-attachments/assets/4000c82d-da00-4e08-94a9-e86110e87e55" /><br/>
-ParkingHut 🚗
+ParkingHut 🚗 <br/>
 🔗 Live Website: 👉 https://parkinghut.in
 
+<p>
 ParkingHut is a lightweight web application that helps users find, book, and list parking spaces easily.
 Space owners can earn by renting out unused parking spots, while drivers get quick and affordable parking.
+</p>
 
 Features
 - User authentication
@@ -22,6 +24,7 @@ Setup:
 
 git clone <repo-url>
 npm install
-Add Firebase configuration in .env
+
+- Add Firebase configuration in .env
 
 npm run dev
